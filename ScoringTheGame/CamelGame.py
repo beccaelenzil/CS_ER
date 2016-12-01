@@ -56,4 +56,14 @@ while not done:
         else:
             print "Oh shit! You have no Red Bull left!"
 
+    if thirst > 4 and thirst <= 6:
+        "You\'re getting thirsty."
+    elif thirst > 6:
+        "You got dehyrated and cannot continue."
+        done = True
 
+    if footTiredness > 5 and footTiredness <= 8:
+        "Your feet are getting tired."
+    elif footTiredness > 8:
+        "Your feet broke off and you cannot continue."
+        done = True
