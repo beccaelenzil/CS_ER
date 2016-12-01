@@ -32,11 +32,28 @@ while not done:
     elif userInput.upper() == "D":
         footTiredness = 0
         print "Your feet have been soothed."
-        teacherMeters += random.randint(7, 14)
+        teacherMeters += random.randint(7, 15)
     elif userInput.upper() == "C":
         dist = random.randint(10, 21)
         metersTraveled += dist
         print "You ran " + dist + " meters."
         thirst += 1
         footTiredness += random.randint(1, 4)
-        teacherMeters += random.randint(7, 14)
+        teacherMeters += random.randint(7, 15)
+    elif userInput.upper() == "B":
+        dist = random.randint(5, 13)
+        metersTraveled += dist
+        print "You speed-walked " + dist + " meters."
+        thirst += 1
+        footTiredness += 1
+        teacherMeters += random.randint(7, 15)
+    elif userInput.upper() == "A":
+        if drinksLeft > 0:
+            drinksLeft -= 1
+            thirst = 0
+            print "You quenched your thirst. Good job."
+            teacherMeters += random.randint(7, 15)
+        else:
+            print "Oh shit! You have no Red Bull left!"
+
+
