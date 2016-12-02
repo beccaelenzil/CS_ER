@@ -78,15 +78,15 @@ while not done:
         print "You got dehyrated and cannot continue."
         done = True
 
-    if footTiredness > 5 and footTiredness <= 8:
+    if footTiredness > 5 and footTiredness <= 8 and not done:
         print "Your feet are getting tired."
-    elif footTiredness > 8:
+    elif footTiredness > 8 and not done:
         print "Your feet hurt too much and you cannot continue."
         done = True
 
-    if teacherMeters >= metersTraveled - 15 and teacherMeters < metersTraveled:
+    if teacherMeters >= metersTraveled - 15 and teacherMeters < metersTraveled and not done:
         print "Your teacher is getting close!"
-    elif teacherMeters >= metersTraveled:
+    elif teacherMeters >= metersTraveled and not done:
         print "Your teacher has caught you!"
         done = True
 
@@ -96,7 +96,7 @@ while not done:
 
     if done and not quitted:
         print "\nYou ded, brudda."
-        if raw_input("Try again? (Type 'yes' or 'no') ").upper() == "YES":
+        if raw_input("Play again? (Type 'yes' or 'no') ").upper() == "YES":
             done = False
             startGame = True
             print "\n"
