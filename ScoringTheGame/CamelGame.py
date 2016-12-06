@@ -16,6 +16,7 @@ while not done:
         drinksLeft = 3
         teacherMeters = -20
 
+        win = False
         quitted = False
         startGame = False
 
@@ -93,9 +94,11 @@ while not done:
     if metersTraveled >= 200 and not done:
         print "You made it to your car and escaped the wrath of you teacher! Great work, kid!"
         done = True
+        win = True
 
     if done and not quitted:
-        print "\nYou ded, brudda."
+        if win = False:
+            print "\nYou ded, brudda."
         if raw_input("Play again? (Type 'yes' or 'no') ").upper() == "YES":
             done = False
             startGame = True
