@@ -1,9 +1,10 @@
 Week 1 (11/30-12/2)
     Wed: took ch 1, 3, 4 quizzes and started camel game
-    Thurs: finished CamelGame
-    Fri: started graphics totorial
+    Thurs:  finished CamelGame
+    Fri:    started graphics tutorial
 
 Week 2 (12/5-12/11)
+    Mon:    Partnered with Nathaniel, decided to make a local-multiplayer, 1v1 platformer, created Google doc for planning
 
 Week 3 (12/12 - 12/16)
 

@@ -12,24 +12,24 @@ BLUE    = (   0,   0, 255)
 
 PI = math.pi
 
-#open 1920x1080 window
+# open 700x500 window
 windowSize = (700, 500)
 screen = pygame.display.set_mode(windowSize)
 
-#set window title
+# set window title
 pygame.display.set_caption("Ezra's First Graphics")
 
-#define game clock
+# define game clock
 clock = pygame.time.Clock()
 
-#main loop runs until user clicks close button
+# main loop runs until user clicks close button
 done = False
 
 while not done:
 
-    for event in pygame.event.get(): #user did something
+    for event in pygame.event.get():  # user did something
 
-        if event.type == pygame.QUIT:  #user hit close
+        if event.type == pygame.QUIT:  # user hit close
             done = True
             print("User asked to quit.")
         elif event.type == pygame.KEYDOWN:
@@ -43,10 +43,10 @@ while not done:
 
     # ---- drawing code goes here ----
 
-    screen.fill(WHITE) #clear screen before doing anything else
+    screen.fill(WHITE)  # clear screen before doing anything else
 
-    pygame.display.flip() #update screen with what we said to draw above
+    pygame.display.flip()  # update screen with what we said to draw above
 
-    clock.tick(60) #limit to 60 fps
+    clock.tick(60)  # limit to 60 fps
 
-pygame.quit() #close window when loop finishes
+pygame.quit()  # close window when loop finishes
