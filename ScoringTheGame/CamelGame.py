@@ -108,7 +108,7 @@ while not done:
 
 
     if quitted:
-        print "\nSeeya later kiddo!"
+        print "\nSeeya later, kiddo!"
 
 
 
