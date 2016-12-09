@@ -12,9 +12,9 @@ DGREY   = (  60,  60,  60)
 BLUE    = (   0,   0, 255)
 
 # set font info
-font = pygame.font.SysFont('Courier', 12, True, False)
+font = pygame.font.SysFont('Courier', 12, bold=False, italic=False)
 fontLineHeight = pygame.font.Font.get_linesize()
-textRows = int(math.ceil(1080/fontLineHeight)
+textRows = int(math.ceil(1080/fontLineHeight))
 
 # make background
 for i in range(0, textRows):
@@ -26,7 +26,7 @@ for i in range(0, textRows):
         lineSize = pygame.font.size(currentLine)
         tooShort = lineSize[0] >= 1920
 
-    text = font.render(currentLine, True, Black)
+    text = font.render(currentLine, True, BLACK)
 
 # open 1920x1080 window
 windowSize = (1920, 1080)
@@ -75,7 +75,7 @@ while not done:
             lineSize = pygame.font.size(currentLine)
             tooShort = lineSize[0] >= 1920
 
-        text = font.render(currentLine, True, Black)
+        text = font.render(currentLine, True, BLACK)
 
 
 
