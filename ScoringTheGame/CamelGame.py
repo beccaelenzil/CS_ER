@@ -97,7 +97,7 @@ while not done:
         win = True
 
     if done and not quitted:
-        if win = False:
+        if win == False:
             print "\nYou ded, brudda."
         if raw_input("Play again? (Type 'yes' or 'no') ").upper() == "YES":
             done = False
