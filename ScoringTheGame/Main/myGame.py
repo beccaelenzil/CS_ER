@@ -12,10 +12,12 @@ DGREY   = (  60,  60,  60)
 BLUE    = (   0,   0, 255)
 
 # set font info
-font = pygame.font.SysFont('Courier', 12, bold=False, italic=False)
-fontLineHeight = pygame.font.Font.get_linesize()
-textRows = int(math.ceil(1080/fontLineHeight))
+font = pygame.font.SysFont("Courier New", 12, bold=False, italic=False)
 
+fontLineHeight = 15  #pygame.font.Font.get_linesize()
+textRows = 72  #int(math.ceil(1080/fontLineHeight))
+textColumns = 274
+'''
 # make background
 for i in range(0, textRows):
     tooShort = True
@@ -23,11 +25,11 @@ for i in range(0, textRows):
 
     while tooShort:
         currentLine += str(round(random.randint(0,1)))
-        lineSize = pygame.font.size(currentLine)
+        lineSize = pygame.font.Font.size(currentLine)
         tooShort = lineSize[0] >= 1920
 
     text = font.render(currentLine, True, BLACK)
-
+'''
 # open 1920x1080 window
 windowSize = (1920, 1080)
 screen = pygame.display.set_mode(windowSize)
@@ -66,22 +68,19 @@ while not done:
 
     # ---- drawing code goes here ----
 
+    screen.fill(WHITE)
+
     for i in range(0, textRows):
         tooShort = True
         currentLine = ""
 
-        while tooShort:
-            currentLine += str(round(random.randint(0,1)))
-            lineSize = pygame.font.size(currentLine)
-            tooShort = lineSize[0] >= 1920
+        for j in range(0, textColumns):
+            currentLine += str(random.randint(0,1))
 
         text = font.render(currentLine, True, BLACK)
+        screen.blit(text, [1, i*fontLineHeight])
 
 
-
-
-
-    # clear screen before doing anything else
 
     pygame.display.flip()  # update screen with what we said to draw above
 
