@@ -10,12 +10,15 @@ WHITE   = ( 255, 255, 255)
 LGREY   = ( 225, 225, 225)
 DGREY   = (  60,  60,  60)
 BLUE    = (   0,   0, 255)
+LBLUE   = ( 150, 160, 255)
 
 # set font info
 font = pygame.font.SysFont("Courier New", 12, bold=False, italic=False)
+fontB = pygame.font.SysFont("Courier New", 12, bold=True, italic=False)
 
-fontLineHeight = 15  #pygame.font.Font.get_linesize()
-textRows = 72  #int(math.ceil(1080/fontLineHeight))
+textHeight = 15  # pygame.font.Font.get_linesize()
+textWidth = 7
+textRows = 72  # int(math.ceil(1080/fontLineHeight))
 textColumns = 274
 '''
 # make background
@@ -35,14 +38,23 @@ windowSize = (1920, 1080)
 screen = pygame.display.set_mode(windowSize)
 
 # set window title
-pygame.display.set_caption("Ezra's Decker Game")
-
+pygame.display.set_caption("Decker Duels")
 
 # define game clock
 clock = pygame.time.Clock()
 
 # main loop runs until user clicks close button
 done = False
+
+#set starting positions of stuff
+platformA_start = 10
+platformA_end = 10
+platformA_width = 60
+platformA_height = 3
+platformA_dir = 1
+
+#reset positions of stuff
+platformA_x = platformA_start
 
 while not done:
 
@@ -70,20 +82,36 @@ while not done:
 
     screen.fill(WHITE)
 
+    # draw background
     for i in range(0, textRows):
-        tooShort = True
         currentLine = ""
 
         for j in range(0, textColumns):
             currentLine += str(random.randint(0,1))
 
-        text = font.render(currentLine, True, BLACK)
-        screen.blit(text, [1, i*fontLineHeight])
+        text = font.render(currentLine, True, LBLUE)
+        screen.blit(text, [1, i*textHeight])
+
+    #draw moving platform
+    if platformA_x >=  textColumns-platformA_end-platformA_width:
+        platformA_dir = -1
+    elif platformA_x <= platformA_start:
+        platformA_dir = 1
+    platformA_x += textWidth * platformA_dir
+
+    for i in range(platformA_height):
+        currentLine = ""
+
+        for j in range(platformA_width):
+            currentLine += str(random.randint(0,1))
+
+        text = fontB.render(currentLine, True, BLUE)
+        screen.blit(text, [1+platformA_x*textWidth, (i+30)*textHeight])
 
 
 
     pygame.display.flip()  # update screen with what we said to draw above
 
-    clock.tick(60)  # limit to 60 fps
+    clock.tick(10)  # limit to 30 fps
 
 pygame.quit()  # close window when loop finishes
