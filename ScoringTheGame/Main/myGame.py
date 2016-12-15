@@ -46,15 +46,16 @@ clock = pygame.time.Clock()
 # main loop runs until user clicks close button
 done = False
 
-#set starting positions of stuff
-platformA_start = 10
+# set starting positions of stuff
+platformA_startX = 10
+platformA_startY = 30
 platformA_end = 10
 platformA_width = 60
 platformA_height = 3
 platformA_dir = 1
 
 #reset positions of stuff
-platformA_x = platformA_start
+platformA_x = platformA_startX
 
 while not done:
 
@@ -69,6 +70,7 @@ while not done:
             print("User let go of a key.")
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print("User pressed a mouse button")
+
 
     # ---- game logic goes here ----
     playerPosition = pygame.mouse.get_pos()
@@ -95,9 +97,11 @@ while not done:
     #draw moving platform
     if platformA_x >=  textColumns-platformA_end-platformA_width:
         platformA_dir = -1
-    elif platformA_x <= platformA_start:
+    elif platformA_x <= platformA_startX:
         platformA_dir = 1
     platformA_x += textWidth * platformA_dir
+
+    pygame.draw.rect(screen, WHITE, [platformA_x*textWidth, platformA_startY*textHeight, platformA_width*textWidth, platformA_height*textHeight])
 
     for i in range(platformA_height):
         currentLine = ""
@@ -106,7 +110,8 @@ while not done:
             currentLine += str(random.randint(0,1))
 
         text = fontB.render(currentLine, True, BLUE)
-        screen.blit(text, [1+platformA_x*textWidth, (i+30)*textHeight])
+        screen.blit(text, [1+platformA_x*textWidth, (i+platformA_startY)*textHeight])
+
 
 
 

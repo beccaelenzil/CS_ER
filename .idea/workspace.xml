@@ -23,8 +23,8 @@
       <file leaf-file-name="Ch5Tutorial.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ScoringTheGame/Ch5Tutorial.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="47" column="15" selection-start-line="47" selection-start-column="15" selection-end-line="47" selection-end-column="15" />
+            <state relative-caret-position="357">
+              <caret line="47" column="15" selection-start-line="0" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -40,11 +40,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="myGame.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="myGame.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ScoringTheGame/Main/myGame.py">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="46" column="12" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Ch10Tutorial.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ScoringTheGame/Ch10Tutorial.py">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="289">
-              <caret line="56" column="29" selection-start-line="56" selection-start-column="29" selection-end-line="56" selection-end-column="29" />
+              <caret line="38" column="27" selection-start-line="38" selection-start-column="27" selection-end-line="38" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -93,13 +103,14 @@
         <option value="/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/pygame/sysfont.py" />
         <option value="$PROJECT_DIR$/ScoringTheGame/Ch8Tutorial.py" />
         <option value="$PROJECT_DIR$/ScoringTheGame/Main/myGame.py" />
+        <option value="$PROJECT_DIR$/ScoringTheGame/Ch10Tutorial.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="239" />
+    <option name="x" value="560" />
     <option name="y" value="23" />
-    <option name="width" value="1197" />
+    <option name="width" value="876" />
     <option name="height" value="872" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -203,24 +214,7 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="Python.myGame">
-    <configuration default="false" name="pygameCheck" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ScoringTheGame" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CS_ER" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ScoringTheGame/pygameCheck.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.Ch10Tutorial">
     <configuration default="false" name="CamelGame" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -285,6 +279,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="CS_ER" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ScoringTheGame/Main/myGame.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Ch10Tutorial" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ScoringTheGame" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CS_ER" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ScoringTheGame/Ch10Tutorial.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -437,19 +448,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.pygameCheck" />
-      <item index="1" class="java.lang.String" itemvalue="Python.CamelGame" />
-      <item index="2" class="java.lang.String" itemvalue="Python.Ch5Tutorial" />
-      <item index="3" class="java.lang.String" itemvalue="Python.Ch11Tutorial" />
-      <item index="4" class="java.lang.String" itemvalue="Python.myGame" />
+      <item index="0" class="java.lang.String" itemvalue="Python.CamelGame" />
+      <item index="1" class="java.lang.String" itemvalue="Python.Ch5Tutorial" />
+      <item index="2" class="java.lang.String" itemvalue="Python.Ch11Tutorial" />
+      <item index="3" class="java.lang.String" itemvalue="Python.myGame" />
+      <item index="4" class="java.lang.String" itemvalue="Python.Ch10Tutorial" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.myGame" />
-        <item index="1" class="java.lang.String" itemvalue="Python.Ch11Tutorial" />
-        <item index="2" class="java.lang.String" itemvalue="Python.Ch5Tutorial" />
-        <item index="3" class="java.lang.String" itemvalue="Python.CamelGame" />
-        <item index="4" class="java.lang.String" itemvalue="Python.pygameCheck" />
+        <item index="0" class="java.lang.String" itemvalue="Python.Ch10Tutorial" />
+        <item index="1" class="java.lang.String" itemvalue="Python.myGame" />
+        <item index="2" class="java.lang.String" itemvalue="Python.Ch11Tutorial" />
+        <item index="3" class="java.lang.String" itemvalue="Python.Ch5Tutorial" />
+        <item index="4" class="java.lang.String" itemvalue="Python.CamelGame" />
       </list>
     </recent_temporary>
   </component>
@@ -457,10 +468,10 @@
     <option name="remove_strategy" value="false" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="239" y="23" width="1197" height="872" extended-state="0" />
+    <frame x="560" y="23" width="876" height="872" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16496599" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22690058" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899868" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31311882" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -593,14 +604,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ScoringTheGame/Ch5Tutorial.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="47" column="15" selection-start-line="47" selection-start-column="15" selection-end-line="47" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ScoringTheGame/GraphicsPracticeCh11/Ch11Tutorial">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -627,8 +630,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ScoringTheGame/Main/myGame.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="46" column="12" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ScoringTheGame/Ch5Tutorial.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="47" column="15" selection-start-line="0" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ScoringTheGame/Ch10Tutorial.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
-          <caret line="56" column="29" selection-start-line="56" selection-start-column="29" selection-end-line="56" selection-end-column="29" />
+          <caret line="38" column="27" selection-start-line="38" selection-start-column="27" selection-end-line="38" selection-end-column="27" />
           <folding />
         </state>
       </provider>
