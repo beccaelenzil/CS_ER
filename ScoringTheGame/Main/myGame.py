@@ -13,13 +13,13 @@ BLUE    = (   0,   0, 255)
 LBLUE   = ( 150, 160, 255)
 
 # set font info
-font = pygame.font.SysFont("Courier New", 12, bold=False, italic=False)
-fontB = pygame.font.SysFont("Courier New", 12, bold=True, italic=False)
+font = pygame.font.SysFont("Courier New", 10, bold=False, italic=False)
+fontB = pygame.font.SysFont("Courier New", 10, bold=True, italic=False)
 
-textHeight = 15  # pygame.font.Font.get_linesize()
-textWidth = 7
-textRows = 72  # int(math.ceil(1080/fontLineHeight))
-textColumns = 274
+textHeight = 13  # pygame.font.Font.get_linesize()
+textWidth = 6
+textRows = 1080/textHeight  # int(math.ceil(1080/fontLineHeight))
+textColumns = 1920/textWidth
 '''
 # make background
 for i in range(0, textRows):
@@ -92,7 +92,7 @@ while not done:
             currentLine += str(random.randint(0,1))
 
         text = font.render(currentLine, True, LBLUE)
-        screen.blit(text, [1, i*textHeight])
+        screen.blit(text, [0, i*textHeight])
 
     #draw moving platform
     if platformA_x >=  textColumns-platformA_end-platformA_width:
@@ -110,13 +110,11 @@ while not done:
             currentLine += str(random.randint(0,1))
 
         text = fontB.render(currentLine, True, BLUE)
-        screen.blit(text, [1+platformA_x*textWidth, (i+platformA_startY)*textHeight])
-
-
+        screen.blit(text, [platformA_x*textWidth, (i+platformA_startY)*textHeight])
 
 
     pygame.display.flip()  # update screen with what we said to draw above
 
-    clock.tick(10)  # limit to 30 fps
+    clock.tick(30)  # limit to 30 fps
 
 pygame.quit()  # close window when loop finishes

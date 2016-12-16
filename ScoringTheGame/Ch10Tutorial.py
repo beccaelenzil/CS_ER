@@ -2,6 +2,7 @@ import pygame
 pygame.init()
 
 import math
+import random
 
 #set basic color variables
 BLACK   = (   0,   0,   0)
@@ -21,7 +22,7 @@ clock = pygame.time.Clock()
 done = False
 
 # define character drawing function
-def draw_stick_figure(screen, x, y):
+def draw_stick_figure(screen, x, y, COLOR):
     # Head
     pygame.draw.ellipse(screen, BLACK, [1+x,y,10,10], 0)
 
@@ -30,11 +31,11 @@ def draw_stick_figure(screen, x, y):
     pygame.draw.line(screen, BLACK, [5+x,17+y], [x,27+y], 2)
 
     # Body
-    pygame.draw.line(screen, RED, [5+x,17+y], [5+x,7+y], 2)
+    pygame.draw.line(screen, COLOR, [5+x,17+y], [5+x,7+y], 2)
 
     # Arms
-    pygame.draw.line(screen, RED, [5+x,7+y], [9+x,17+y], 2)
-    pygame.draw.line(screen, RED, [5+x,7+y], [1+x,17+y], 2)
+    pygame.draw.line(screen, COLOR, [5+x,7+y], [9+x,17+y], 2)
+    pygame.draw.line(screen, COLOR, [5+x,7+y], [1+x,17+y], 2)
 
 # Speed in pixels per frame
 x_speed = 0
@@ -78,7 +79,7 @@ while not done:
     y_coord += y_speed
 
     # Draw the stick figure
-    draw_stick_figure(screen, x_coord, y_coord)
+    draw_stick_figure(screen, x_coord, y_coord, [random.randint(0,225),random.randint(0,225),random.randint(0,225)])
 
     pygame.display.flip()  # update screen with what we said to draw above
 
