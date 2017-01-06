@@ -16,10 +16,10 @@ LBLUE   = ( 150, 160, 255)
 font = pygame.font.SysFont("Courier New", 10, bold=False, italic=False)
 fontB = pygame.font.SysFont("Courier New", 10, bold=True, italic=False)
 
-textHeight = 13  # pygame.font.Font.get_linesize()
+textHeight = 13
 textWidth = 6
-textRows = 1080/textHeight  # int(math.ceil(1080/fontLineHeight))
-textColumns = 1920/textWidth
+textRows = 1080/textHeight  # 83
+textColumns = 1920/textWidth  # 320
 '''
 # make background
 for i in range(0, textRows):

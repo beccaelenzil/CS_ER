@@ -21,8 +21,10 @@ Week 3 (12/12 - 12/16)
     Mon: Finished shifting numbers background
     Tues: Wrote code for moving platform made out of shifting numbers
     Wed: Completed controller tutorial
+    Fri: Changed font size
 
 Week 4 (1/3-1/8)
+    Have been working on level design in collaboration with music kiddo
 
 Week 5 (1/9-1/15)
 
