@@ -19,9 +19,14 @@ screen = pygame.display.set_mode(windowSize)
 # set window title
 pygame.display.set_caption("Ezra's Practice Graphics")
 
-
 # define game clock
 clock = pygame.time.Clock()
+
+# play background sounds
+pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
+pygame.mixer.music.load('maggotSounds.ogg')
+pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
+pygame.mixer.music.play()
 
 # main loop runs until user clicks close button
 done = False
@@ -29,6 +34,9 @@ done = False
 while not done:
 
     for event in pygame.event.get():  # user did something
+
+        if event.type == pygame.constants.USEREVENT:
+            pygame.mixer.music.play()
 
         if event.type == pygame.QUIT:  # user hit close
             done = True
