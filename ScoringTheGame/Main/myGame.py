@@ -20,19 +20,7 @@ textHeight = 13
 textWidth = 6
 textRows = 1080/textHeight  # 83
 textColumns = 1920/textWidth  # 320
-'''
-# make background
-for i in range(0, textRows):
-    tooShort = True
-    currentLine = ""
 
-    while tooShort:
-        currentLine += str(round(random.randint(0,1)))
-        lineSize = pygame.font.Font.size(currentLine)
-        tooShort = lineSize[0] >= 1920
-
-    text = font.render(currentLine, True, BLACK)
-'''
 # open 1920x1080 window
 windowSize = (1920, 1080)
 screen = pygame.display.set_mode(windowSize)
