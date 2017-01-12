@@ -175,21 +175,21 @@ class Level_01(Level):
         Level.__init__(self, player)
 
         # Array with width, height, x, and y of platform
-        level = [[60, 2, 130, 30],  # middle platform
-                 [40, 2, 80, 50],  # left middle platform
-                 [40, 2, 200, 50],  # left middle platform
+        level = [[60, 2, 130, 32],  # middle platform
+                 [34, 2, 86, 44],  # left middle platform
+                 [34, 2, 200, 44],  # left middle platform
                  [320, 5, 0, 78],  # floor
-                 [30, 2, 0, 76],  # floor left podium
-                 [30, 2, 290, 76],  # floor right podium
+                 [30, 3, 0, 75],  # floor left podium
+                 [30, 3, 290, 75],  # floor right podium
                  [6, 83, 0, 0],  # left wall
                  [6, 83, 314, 0],  # left wall
-                 [100, 9, 110, 58],  # tunnel ceiling
-                 [17, 14, 76, 56],
-                 [17, 13, 93, 57],
-                 [17, 13, 210, 57],
-                 [17, 14, 227, 56],
-                 [6, 83, 0, 0],
-                 [6, 83, 314, 0]
+                 [100, 9, 110, 58],  # tunnel ceiling 3
+                 [21, 6, 72, 64],  # tunnel ceiling 1
+                 [17, 13, 93, 57],  # tunnel ceiling 2
+                 [17, 13, 210, 57],  # tunnel ceiling 4
+                 [21, 6, 227, 64],  # tunnel ceiling 5
+                 [12, 42, 20, 16],  # left column
+                 [12, 42, 288, 16]  # right column
                  ]
 
         # Go through the array above and add platforms
@@ -212,22 +212,28 @@ def main():
     pygame.display.set_caption("Decker Duels")
 
     # Create the player
-    player = Player()
+    playerA = Player()
+    playerB = Player()
 
     # Create all the levels
     level_list = []
-    level_list.append( Level_01(player) )
+    level_list.append( Level_01(playerA) )
 
     # Set the current level
     current_level_no = 0
     current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
-    player.level = current_level
+    playerA.level = current_level
+    playerB.level = current_level
 
-    player.rect.x = 15*textWidth
-    player.rect.y = SCREEN_HEIGHT - player.rect.height - 5*textHeight
-    active_sprite_list.add(player)
+    playerA.rect.x = 15*textWidth
+    playerA.rect.y = 65*textHeight
+    active_sprite_list.add(playerA)
+
+    playerB.rect.x = 320*textWidth - 15*textWidth - playerB.rect.width
+    playerB.rect.y = 65*textHeight
+    active_sprite_list.add(playerB)
 
     # Loop until the user clicks the close button.
     done = False
@@ -242,18 +248,32 @@ def main():
                 done = True
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    player.go_left()
-                if event.key == pygame.K_RIGHT:
-                    player.go_right()
-                if event.key == pygame.K_UP:
-                    player.jump()
+                # playerA Controls
+                if event.key == pygame.K_a:
+                    playerA.go_left()
+                if event.key == pygame.K_d:
+                    playerA.go_right()
+                if event.key == pygame.K_g:
+                    playerA.jump()
+
+                # playerB controls
+                if event.key == pygame.K_h:
+                    playerB.go_left()
+                if event.key == pygame.K_k:
+                    playerB.go_right()
+                if event.key == pygame.K_SEMICOLON:
+                    playerB.jump()
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT and player.change_x < 0:
-                    player.stop()
-                if event.key == pygame.K_RIGHT and player.change_x > 0:
-                    player.stop()
+                if event.key == pygame.K_a and playerA.change_x < 0:
+                    playerA.stop()
+                if event.key == pygame.K_d and playerA.change_x > 0:
+                    playerA.stop()
+
+                if event.key == pygame.K_h and playerB.change_x < 0:
+                    playerB.stop()
+                if event.key == pygame.K_k and playerB.change_x > 0:
+                    playerB.stop()
 
         # Update the player.
         active_sprite_list.update()
@@ -262,12 +282,16 @@ def main():
         current_level.update()
 
         # If the player gets near the right side, shift the world left (-x)
-        if player.rect.right > SCREEN_WIDTH:
-            player.rect.right = SCREEN_WIDTH
+        if playerA.rect.right > SCREEN_WIDTH:
+            playerA.rect.right = SCREEN_WIDTH
+        if playerB.rect.right > SCREEN_WIDTH:
+            playerB.rect.right = SCREEN_WIDTH
 
         # If the player gets near the left side, shift the world right (+x)
-        if player.rect.left < 0:
-            player.rect.left = 0
+        if playerA.rect.left < 0:
+            playerA.rect.left = 0
+        if playerB.rect.left < 0:
+            playerB.rect.left = 0
 
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
         current_level.draw(screen)
@@ -275,7 +299,7 @@ def main():
 
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
-        # Limit to 60 frames per second
+        # Limit to 30 frames per second
         clock.tick(30)
 
         # Go ahead and update the screen with what we've drawn.
