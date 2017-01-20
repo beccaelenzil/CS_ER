@@ -1,0 +1,20 @@
+Cyberpunk themed 1v1 local multiplayer game
+
+Menu:
+    Two players ready-up by jacking into their decks
+        Maybe an animation of plugging a cord into the side of a decker’s head
+
+In game
+    the deckers control avatars, street-samurai-styled ethereal humanoids
+    They fight in the matrix
+        A “Nidhogg”-like 2D-platformer space, with some open areas, and some tight corridors
+    They have a number of functions they can execute
+        move() - they can walk side to side
+        jump() - they can jump
+        dash() - burst of speed in the direction they are pointing, kills opponent on contact
+            The longer you hold down the key, the farther you go
+            Has recharge time
+        corrupt() - leave a trap in the environment deadly to both players
+            Each player limited to 3? 5? (based on size of environment)
+        hide() - become invisible
+        jump() and dash() are disabled, move() is half-speed, and dash() does not recharge while active

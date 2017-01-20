@@ -1,4 +1,8 @@
 import pygame
+import math
+import random
+
+pygame.init()
 
 # Global constants
 
@@ -7,11 +11,15 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
 LGREY = (225, 225, 225)
 DGREY = (60, 60, 60)
-BLUE = (0, 0, 255)
 LBLUE = (150, 160, 255)
+
+# set font info
+font = pygame.font.SysFont("Courier New", 10, bold=False, italic=False)
+fontB = pygame.font.SysFont("Courier New", 10, bold=True, italic=False)
 
 # Screen dimensions
 SCREEN_WIDTH = 1920
@@ -31,25 +39,44 @@ class Player(pygame.sprite.Sprite):
         # Call the parent's constructor
         super(self.__class__, self).__init__()
 
+        self.color = (0, 0, 0)
+
+        # enable dashing
+        self.canDash = True
+
+        self.upPressed = False
+        self.leftPressed = False
+        self.rightPressed = False
+        self.downPressed = False
+
         # Create an image of the block, and fill it with a color.
         width = 4
         height = 6
         self.image = pygame.Surface([width*textWidth, height*textHeight])
-        self.image.fill(RED)
 
         # Set a reference to the image rect.
         self.rect = self.image.get_rect()
 
-        # Set speed vector of player
+        # Set speed vectors of player
         self.change_x = 0
         self.change_y = 0
+
+        self.move_x = 0
+        self.move_y = 0
+        self.dash_x = 0
+        self.dash_y = 0
 
         # List of sprites we can bump against
         self.level = None
 
     def update(self):
+        self.image.fill(self.color)
+
         # Gravity
         self.calc_grav()
+
+        # calculate total movement
+        self.change_x = self.move_x + self.dash_x
 
         # Move left/right
         self.rect.x += self.change_x
@@ -75,11 +102,18 @@ class Player(pygame.sprite.Sprite):
             # Reset our position based on the top/bottom of the object.
             if self.change_y > 0:
                 self.rect.bottom = block.rect.top
+                self.canDash = True
             elif self.change_y < 0:
                 self.rect.top = block.rect.bottom
 
             # Stop our vertical movement
             self.change_y = 0
+
+        # add deceleration to horizontal dash
+        if self.dash_x > 0:
+            self.dash_x -= 2
+        elif self.dash_x < 0:
+            self.dash_x += 2
 
     def calc_grav(self):
         """ Calculate effect of gravity. """
@@ -109,15 +143,29 @@ class Player(pygame.sprite.Sprite):
     # Player-controlled movement:
     def go_left(self):
         """ Called when the user hits the left arrow. """
-        self.change_x = -10
+        self.move_x -= 10
 
     def go_right(self):
         """ Called when the user hits the right arrow. """
-        self.change_x = 10
+        self.move_x += 10
 
-    def stop(self):
-        """ Called when the user lets off the keyboard. """
-        self.change_x = 0
+    """def stop(self):
+        # Called when the user lets off the keyboard.
+        self.move_x = 0
+        self.canDash = True"""
+
+    def dash(self):
+        if self.canDash:
+            if self.upPressed:
+                self.change_y -= 20
+            if self.downPressed:
+                self.change_y += 20
+            if self.leftPressed:
+                self.dash_x -= 20
+            if self.rightPressed:
+                self.dash_x += 20
+
+            self.canDash = False
 
 
 class Platform(pygame.sprite.Sprite):
@@ -157,7 +205,16 @@ class Level(object):
         """ Draw everything on this level. """
 
         # Draw the background
-        screen.fill(BLUE)
+        screen.fill(WHITE)
+
+        '''for i in range(0, textRows):
+            currentLine = ""
+
+            for j in range(0, textColumns):
+                currentLine += str(random.randint(0,1))
+
+            text = font.render(currentLine, True, LBLUE)
+            screen.blit(text, [0, i*textHeight])'''
 
         # Draw all the sprite lists that we have
         self.platform_list.draw(screen)
@@ -215,6 +272,10 @@ def main():
     playerA = Player()
     playerB = Player()
 
+    #set player colors
+    playerA.color = RED
+    playerB.color = YELLOW
+
     # Create all the levels
     level_list = []
     level_list.append( Level_01(playerA) )
@@ -251,20 +312,37 @@ def main():
                 # playerA Controls
                 if event.key == pygame.K_a:
                     playerA.go_left()
+                    playerA.leftPressed = True
                 if event.key == pygame.K_d:
                     playerA.go_right()
+                    playerA.rightPressed = True
+                if event.key == pygame.K_w:
+                    playerA.upPressed = True
+                if event.key == pygame.K_s:
+                    playerA.downPressed = True
                 if event.key == pygame.K_g:
                     playerA.jump()
+                if event.key == pygame.K_f:
+                    playerA.dash()
 
                 # playerB controls
                 if event.key == pygame.K_h:
                     playerB.go_left()
+                    playerB.leftPressed = True
                 if event.key == pygame.K_k:
                     playerB.go_right()
+                    playerB.rightPressed = True
+                if event.key == pygame.K_u:
+                    playerB.upPressed = True
+                if event.key == pygame.K_j:
+                    playerB.downPressed = True
                 if event.key == pygame.K_SEMICOLON:
                     playerB.jump()
+                if event.key == pygame.K_l:
+                    playerB.dash()
 
             if event.type == pygame.KEYUP:
+                '''
                 if event.key == pygame.K_a and playerA.change_x < 0:
                     playerA.stop()
                 if event.key == pygame.K_d and playerA.change_x > 0:
@@ -273,7 +351,31 @@ def main():
                 if event.key == pygame.K_h and playerB.change_x < 0:
                     playerB.stop()
                 if event.key == pygame.K_k and playerB.change_x > 0:
-                    playerB.stop()
+                    playerB.stop()'''
+
+                # playerA Controls
+                if event.key == pygame.K_a:
+                    playerA.go_right()
+                    playerA.leftPressed = False
+                if event.key == pygame.K_d:
+                    playerA.go_left()
+                    playerA.rightPressed = False
+                if event.key == pygame.K_w:
+                    playerA.upPressed = False
+                if event.key == pygame.K_s:
+                    playerA.downPressed = False
+
+                # playerB controls
+                if event.key == pygame.K_h:
+                    playerB.go_right()
+                    playerB.leftPressed = False
+                if event.key == pygame.K_k:
+                    playerB.go_left()
+                    playerB.rightPressed = False
+                if event.key == pygame.K_u:
+                    playerB.upPressed = False
+                if event.key == pygame.K_j:
+                    playerB.downPressed = False
 
         # Update the player.
         active_sprite_list.update()
@@ -298,6 +400,9 @@ def main():
         active_sprite_list.draw(screen)
 
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
+
+        print playerA.canDash
+
 
         # Limit to 30 frames per second
         clock.tick(30)
