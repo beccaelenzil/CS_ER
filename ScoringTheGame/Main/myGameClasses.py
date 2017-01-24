@@ -169,12 +169,9 @@ class Player(pygame.sprite.Sprite):
 
 
 class Platform(pygame.sprite.Sprite):
-    """ Platform the user can jump on """
 
     def __init__(self, width, height):
-        """ Platform constructor. Assumes constructed with user passing in
-            an array of 5 numbers like what's defined at the top of this
-            code. """
+
         super(self.__class__, self).__init__()
 
         self.image = pygame.Surface([width*textWidth, height*textHeight])
@@ -183,14 +180,94 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 
+class MovingPlatform(Platform):
+
+    change_x = 0
+    change_y = 0
+
+    boundary_top = 0
+    boundary_bottom = 0
+    boundary_left = 0
+    boundary_right = 0
+
+    player_a = None
+    player_b = None
+
+    level = None
+
+    def __init__(self, width, height):
+        super(self.__class__, self).__init__(width, height)
+
+    def update(self):
+
+        # Move left/right
+        self.rect.x += self.change_x
+
+        # See if we hit playerA
+        hit = pygame.sprite.collide_rect(self, self.player_a)
+        if hit:
+            # We did hit the player. Shove the player around and
+            # assume he/she won't hit anything else.
+
+            # If we are moving right, set our right side
+            # to the left side of the item we hit
+            if self.change_x < 0:
+                self.player_a.rect.right = self.rect.left
+            else:
+                # Otherwise if we are moving left, do the opposite.
+                self.player_a.rect.left = self.rect.right
+
+        # See if we hit playerB
+        hit = pygame.sprite.collide_rect(self, self.player_b)
+        if hit:
+
+            if self.change_x < 0:
+                self.player_b.rect.right = self.rect.left
+            else:
+                self.player_b.rect.left = self.rect.right
+
+        # Move up/down
+        self.rect.y += self.change_y
+
+        # Check and see if we playerA
+        hit = pygame.sprite.collide_rect(self, self.player_a)
+        if hit:
+            # We did hit the player. Shove the player around and
+            # assume he/she won't hit anything else.
+
+            # Reset our position based on the top/bottom of the object.
+            if self.change_y < 0:
+                self.player_a.rect.bottom = self.rect.top
+            else:
+                self.player_a.rect.top = self.rect.bottom
+
+        # Check and see if we playerB
+        hit = pygame.sprite.collide_rect(self, self.player_b)
+        if hit:
+
+            if self.change_y < 0:
+                self.player_b.rect.bottom = self.rect.top
+            else:
+                self.player_b.rect.top = self.rect.bottom
+
+        # Check boundaries and reverse direction if necessary
+        if self.rect.bottom > self.boundary_bottom or self.rect.top < self.boundary_top:
+            self.change_y *= -1
+
+        cur_pos = self.rect.x - self.level.world_shift
+        if cur_pos < self.boundary_left or cur_pos > self.boundary_right:
+            self.change_x *= -1
+
+
 class Level(object):
 
-    def __init__(self, player):
+    def __init__(self, player_a, player_b):
         """ Constructor. Pass in a handle to player. Needed for when moving platforms
             collide with the player. """
         self.platform_list = pygame.sprite.Group()
         self.enemy_list = pygame.sprite.Group()
-        self.player = player
+        self.player_a = player_a
+        self.player_b = player_b
 
         # Background image
         self.background = None
@@ -225,11 +302,11 @@ class Level(object):
 class Level_01(Level):
     """ Definition for level 1. """
 
-    def __init__(self, player):
+    def __init__(self, player_a, player_b):
         """ Create level 1. """
 
         # Call the parent constructor
-        Level.__init__(self, player)
+        Level.__init__(self, player_a, player_b)
 
         # Array with width, height, x, and y of platform
         level = [[60, 2, 130, 32],  # middle platform
@@ -254,8 +331,21 @@ class Level_01(Level):
             block = Platform(platform[0], platform[1])
             block.rect.x = platform[2]*textWidth
             block.rect.y = platform[3]*textHeight
-            block.player = self.player
+            block.player_a = self.player_a
+            block.player_b = self.player_b
             self.platform_list.add(block)
+
+        # Add a moving platform
+        block = MovingPlatform(48*textWidth, 2*textHeight)
+        block.rect.x = 136*textWidth
+        block.rect.y = 20*textHeight
+        block.boundary_left = 42*textWidth
+        block.boundary_right = 278*textWidth
+        block.change_x = textWidth
+        block.player_a = self.player_a
+        block.player_b = self.player_b
+        block.level = self
+        self.platform_list.add(block)
 
 
 def main():
@@ -272,13 +362,13 @@ def main():
     playerA = Player()
     playerB = Player()
 
-    #set player colors
+    # set player colors
     playerA.color = RED
     playerB.color = YELLOW
 
     # Create all the levels
     level_list = []
-    level_list.append( Level_01(playerA) )
+    level_list.append(Level_01(playerA, playerB))
 
     # Set the current level
     current_level_no = 0
@@ -342,16 +432,6 @@ def main():
                     playerB.dash()
 
             if event.type == pygame.KEYUP:
-                '''
-                if event.key == pygame.K_a and playerA.change_x < 0:
-                    playerA.stop()
-                if event.key == pygame.K_d and playerA.change_x > 0:
-                    playerA.stop()
-
-                if event.key == pygame.K_h and playerB.change_x < 0:
-                    playerB.stop()
-                if event.key == pygame.K_k and playerB.change_x > 0:
-                    playerB.stop()'''
 
                 # playerA Controls
                 if event.key == pygame.K_a:
@@ -400,9 +480,6 @@ def main():
         active_sprite_list.draw(screen)
 
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
-
-        print playerA.canDash
-
 
         # Limit to 30 frames per second
         clock.tick(30)
