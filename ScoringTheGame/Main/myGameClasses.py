@@ -172,7 +172,8 @@ class Platform(pygame.sprite.Sprite):
 
     def __init__(self, width, height):
 
-        super(self.__class__, self).__init__()
+        # super(self.__class__, self).__init__()
+        pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.Surface([width*textWidth, height*textHeight])
         self.image.fill(GREEN)
@@ -196,7 +197,8 @@ class MovingPlatform(Platform):
     level = None
 
     def __init__(self, width, height):
-        super(self.__class__, self).__init__(width, height)
+        # super(self.__class__, self).__init__(width, height)
+        Platform.__init__(self, width, height)
 
     def update(self):
 
@@ -254,7 +256,7 @@ class MovingPlatform(Platform):
         if self.rect.bottom > self.boundary_bottom or self.rect.top < self.boundary_top:
             self.change_y *= -1
 
-        cur_pos = self.rect.x - self.level.world_shift
+        cur_pos = self.rect.x
         if cur_pos < self.boundary_left or cur_pos > self.boundary_right:
             self.change_x *= -1
 
@@ -336,11 +338,11 @@ class Level_01(Level):
             self.platform_list.add(block)
 
         # Add a moving platform
-        block = MovingPlatform(48*textWidth, 2*textHeight)
+        block = MovingPlatform(48, 2)
         block.rect.x = 136*textWidth
         block.rect.y = 20*textHeight
         block.boundary_left = 42*textWidth
-        block.boundary_right = 278*textWidth
+        block.boundary_right = 278*textWidth-48*textWidth
         block.change_x = textWidth
         block.player_a = self.player_a
         block.player_b = self.player_b
