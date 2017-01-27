@@ -18,8 +18,8 @@ DGREY = (60, 60, 60)
 LBLUE = (150, 160, 255)
 
 # set font info
-font = pygame.font.SysFont("Courier New", 10, bold=False, italic=False)
-fontB = pygame.font.SysFont("Courier New", 10, bold=True, italic=False)
+# font = pygame.font.SysFont("Courier New", 10, bold=False, italic=False)
+# fontB = pygame.font.SysFont("Courier New", 10, bold=True, italic=False)
 
 # Screen dimensions
 SCREEN_WIDTH = 1920
@@ -111,9 +111,9 @@ class Player(pygame.sprite.Sprite):
 
         # add deceleration to horizontal dash
         if self.dash_x > 0:
-            self.dash_x -= 2
+            self.dash_x -= 3
         elif self.dash_x < 0:
-            self.dash_x += 2
+            self.dash_x += 3
 
     def calc_grav(self):
         """ Calculate effect of gravity. """
@@ -157,13 +157,13 @@ class Player(pygame.sprite.Sprite):
     def dash(self):
         if self.canDash:
             if self.upPressed:
-                self.change_y -= 20
+                self.change_y = -26
             if self.downPressed:
-                self.change_y += 20
+                self.change_y = 26
             if self.leftPressed:
-                self.dash_x -= 20
+                self.dash_x -= 30
             if self.rightPressed:
-                self.dash_x += 20
+                self.dash_x += 30
 
             self.canDash = False
 
