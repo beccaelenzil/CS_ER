@@ -22,12 +22,12 @@ LBLUE = (150, 160, 255)
 # fontB = pygame.font.SysFont("Courier New", 10, bold=True, italic=False)
 
 # Screen dimensions
-SCREEN_WIDTH = 1920
-SCREEN_HEIGHT = 1080
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 
-textHeight = 13
-textWidth = 6
-textRows = SCREEN_HEIGHT/textHeight  # 83
+textHeight = 9
+textWidth = 4
+textRows = SCREEN_HEIGHT/textHeight  # 80
 textColumns = SCREEN_WIDTH/textWidth  # 320
 
 
@@ -66,6 +66,10 @@ class Player(pygame.sprite.Sprite):
         self.dash_x = 0
         self.dash_y = 0
 
+        # moving platform conditions
+        self.platformBoost_x = 0
+        self.onMovingPlatform = False
+
         # List of sprites we can bump against
         self.level = None
 
@@ -76,7 +80,9 @@ class Player(pygame.sprite.Sprite):
         self.calc_grav()
 
         # calculate total movement
-        self.change_x = self.move_x + self.dash_x
+        self.change_x = self.move_x + self.dash_x + self.platformBoost_x
+
+        self.platformBoost_x = 0
 
         # Move left/right
         self.rect.x += self.change_x
@@ -102,6 +108,8 @@ class Player(pygame.sprite.Sprite):
             # Reset our position based on the top/bottom of the object.
             if self.change_y > 0:
                 self.rect.bottom = block.rect.top
+                if isinstance(block, MovingPlatform):
+                    self.platformBoost_x = block.change_x
                 self.canDash = True
             elif self.change_y < 0:
                 self.rect.top = block.rect.bottom
@@ -111,16 +119,13 @@ class Player(pygame.sprite.Sprite):
 
         # add deceleration to horizontal dash
         if self.dash_x > 0:
-            self.dash_x -= 3
+            self.dash_x -= 2
         elif self.dash_x < 0:
-            self.dash_x += 3
+            self.dash_x += 2
 
     def calc_grav(self):
         """ Calculate effect of gravity. """
-        if self.change_y == 0:
-            self.change_y = 1
-        else:
-            self.change_y += 1.4
+        self.change_y += 0.15 * textHeight
 
         # See if we are on the ground.
         if self.rect.y >= SCREEN_HEIGHT - self.rect.height and self.change_y >= 0:
@@ -138,34 +143,37 @@ class Player(pygame.sprite.Sprite):
 
         # If it is ok to jump, set our speed upwards
         if len(platform_hit_list) > 0 or self.rect.bottom >= SCREEN_HEIGHT:
-            self.change_y = -24
+            self.change_y = -2.2 * textHeight
 
     # Player-controlled movement:
     def go_left(self):
-        """ Called when the user hits the left arrow. """
-        self.move_x -= 10
+        self.move_x -= 2 * textWidth
 
     def go_right(self):
-        """ Called when the user hits the right arrow. """
-        self.move_x += 10
+        self.move_x += 2 * textWidth
 
     """def stop(self):
         # Called when the user lets off the keyboard.
         self.move_x = 0
         self.canDash = True"""
 
+    def dash_success(self):
+        self.canDash = False
+
     def dash(self):
         if self.canDash:
             if self.upPressed:
-                self.change_y = -26
+                self.change_y = -2.4 * textHeight
+                self.dash_success()
             if self.downPressed:
-                self.change_y = 26
+                self.change_y = 2.4 * textHeight
+                self.dash_success()
             if self.leftPressed:
-                self.dash_x -= 30
+                self.dash_x -= 5 * textWidth
+                self.dash_success()
             if self.rightPressed:
-                self.dash_x += 30
-
-            self.canDash = False
+                self.dash_x += 5 * textWidth
+                self.dash_success()
 
 
 class Platform(pygame.sprite.Sprite):
@@ -267,7 +275,6 @@ class Level(object):
         """ Constructor. Pass in a handle to player. Needed for when moving platforms
             collide with the player. """
         self.platform_list = pygame.sprite.Group()
-        self.enemy_list = pygame.sprite.Group()
         self.player_a = player_a
         self.player_b = player_b
 
@@ -278,7 +285,6 @@ class Level(object):
     def update(self):
         """ Update everything in this level."""
         self.platform_list.update()
-        self.enemy_list.update()
 
     def draw(self, screen):
         """ Draw everything on this level. """
@@ -297,10 +303,9 @@ class Level(object):
 
         # Draw all the sprite lists that we have
         self.platform_list.draw(screen)
-        self.enemy_list.draw(screen)
 
 
-# Create platforms for the level
+# Create platforms for  level 1
 class Level_01(Level):
     """ Definition for level 1. """
 
@@ -314,16 +319,16 @@ class Level_01(Level):
         level = [[60, 2, 130, 32],  # middle platform
                  [34, 2, 86, 44],  # left middle platform
                  [34, 2, 200, 44],  # left middle platform
-                 [320, 5, 0, 78],  # floor
-                 [30, 3, 0, 75],  # floor left podium
-                 [30, 3, 290, 75],  # floor right podium
+                 [320, 10, 0, 76],  # floor
+                 [30, 8, 0, 74],  # floor left podium
+                 [30, 8, 290, 74],  # floor right podium
                  [6, 83, 0, 0],  # left wall
                  [6, 83, 314, 0],  # left wall
-                 [100, 9, 110, 58],  # tunnel ceiling 3
-                 [21, 6, 72, 64],  # tunnel ceiling 1
-                 [17, 13, 93, 57],  # tunnel ceiling 2
-                 [17, 13, 210, 57],  # tunnel ceiling 4
-                 [21, 6, 227, 64],  # tunnel ceiling 5
+                 [21, 6, 72, 63],  # tunnel ceiling 1
+                 [17, 13, 93, 56],  # tunnel ceiling 2
+                 [100, 9, 110, 57],  # tunnel ceiling 3
+                 [17, 13, 210, 56],  # tunnel ceiling 4
+                 [21, 6, 227, 63],  # tunnel ceiling 5
                  [12, 42, 20, 16],  # left column
                  [12, 42, 288, 16]  # right column
                  ]
@@ -483,11 +488,11 @@ def main():
 
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
-        # Limit to 30 frames per second
-        clock.tick(30)
+        # Limit to 60 frames per second
+        clock.tick(60)
 
         # Go ahead and update the screen with what we've drawn.
-        pygame.display.flip()
+        pygame.display.update()
 
     pygame.quit()
 

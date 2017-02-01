@@ -34,11 +34,14 @@ Week 5 (1/9-1/15)
 Week 6 (1/16-1/22)
 
 Week 7 (1/23-1/29)
+    finished movement
+    fixed audio playback and scaling issues
+        makes game now run at super low frame rate
 
 Week 8 (1/30-2/5)
 
 Week 9 (2/6-2/12)
-
+h
 Week 10 (2/13-2/17)
 
 Week 11 (2/27-3/5)
