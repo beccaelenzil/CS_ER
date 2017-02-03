@@ -30,6 +30,8 @@ textWidth = 4
 textRows = SCREEN_HEIGHT/textHeight  # 80
 textColumns = SCREEN_WIDTH/textWidth  # 320
 
+current_level_no = 0
+numLevels = 1
 
 class Player(pygame.sprite.Sprite):
 
@@ -41,8 +43,12 @@ class Player(pygame.sprite.Sprite):
 
         self.color = (0, 0, 0)
 
+        # create score counter
+        self.score = 0
+
         # enable dashing
         self.canDash = True
+        self.attacking = 0
 
         self.upPressed = False
         self.leftPressed = False
@@ -123,6 +129,10 @@ class Player(pygame.sprite.Sprite):
         elif self.dash_x < 0:
             self.dash_x += 2
 
+        # count down attack active
+        if self.attacking > 0:
+            self.attacking -= 1
+
     def calc_grav(self):
         """ Calculate effect of gravity. """
         self.change_y += 0.15 * textHeight
@@ -159,6 +169,7 @@ class Player(pygame.sprite.Sprite):
 
     def dash_success(self):
         self.canDash = False
+        self.attacking = 10
 
     def dash(self):
         if self.canDash:
@@ -278,6 +289,12 @@ class Level(object):
         self.player_a = player_a
         self.player_b = player_b
 
+        # player staring positions
+        self.a_start_x = 0
+        self.a_start_y = 0
+        self.b_start_x = 0
+        self.b_start_y = 0
+
         # Background image
         self.background = None
 
@@ -354,6 +371,31 @@ class Level_01(Level):
         block.level = self
         self.platform_list.add(block)
 
+        self.a_start_x = 15*textWidth
+        self.a_start_y = 65*textHeight
+        self.b_start_x = 320*textWidth - 15*textWidth - player_b.rect.width
+        self.b_start_y = 65*textHeight
+
+
+def win_check(player_a, player_b, level_list):
+    if pygame.sprite.collide_rect(player_a, player_b):
+        if player_a.attacking and player_b.attacking:
+            print "Tie"
+            load_level(player_a, player_b, False, level_list)
+        elif player_a.attacking:
+            print "A Wins"
+            player_a.score += 1
+            load_level(player_a, player_b, True, level_list)
+        elif player_b.attacking:
+            print "B Wins"
+            player_b.score += 1
+            load_level(player_a, player_b, True, level_list)
+        else:
+            print "Nobody attacking"
+
+def load_level(player_a, player_b, change_level, level_list):
+    if change_level:
+        current_level_no = random.randint(0, level_list.amount() - 1)
 
 def main():
     """ Main Program """
@@ -378,19 +420,18 @@ def main():
     level_list.append(Level_01(playerA, playerB))
 
     # Set the current level
-    current_level_no = 0
     current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
     playerA.level = current_level
     playerB.level = current_level
 
-    playerA.rect.x = 15*textWidth
-    playerA.rect.y = 65*textHeight
+    playerA.rect.x = current_level.a_start_x
+    playerA.rect.y = current_level.a_start_y
     active_sprite_list.add(playerA)
 
-    playerB.rect.x = 320*textWidth - 15*textWidth - playerB.rect.width
-    playerB.rect.y = 65*textHeight
+    playerB.rect.x = current_level.b_start_x
+    playerB.rect.y = current_level.b_start_y
     active_sprite_list.add(playerB)
 
     # Loop until the user clicks the close button.
@@ -433,9 +474,9 @@ def main():
                     playerB.upPressed = True
                 if event.key == pygame.K_j:
                     playerB.downPressed = True
-                if event.key == pygame.K_SEMICOLON:
+                if event.key == pygame.K_QUOTE:
                     playerB.jump()
-                if event.key == pygame.K_l:
+                if event.key == pygame.K_SEMICOLON:
                     playerB.dash()
 
             if event.type == pygame.KEYUP:
@@ -482,6 +523,9 @@ def main():
         if playerB.rect.left < 0:
             playerB.rect.left = 0
 
+        # check if somebody won
+        win_check(playerA, playerB)
+
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
         current_level.draw(screen)
         active_sprite_list.draw(screen)
@@ -493,6 +537,8 @@ def main():
 
         # Go ahead and update the screen with what we've drawn.
         pygame.display.update()
+
+        # print clock.get_fps()
 
     pygame.quit()
 
