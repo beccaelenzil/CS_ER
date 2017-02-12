@@ -11,7 +11,10 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
-YELLOW = (255, 255, 0)
+GOLD = (255, 165, 0)
+VIOLET = (148, 0, 211)
+MAGENTA = (255, 0, 255)
+ORANGE = (255, 140, 0)
 BLUE = (0, 0, 255)
 LGREY = (225, 225, 225)
 DGREY = (60, 60, 60)
@@ -42,6 +45,7 @@ class Player(pygame.sprite.Sprite):
         super(self.__class__, self).__init__()
 
         self.color = (0, 0, 0)
+        self.dashColor = (0, 0, 0)
 
         # create score counter
         self.score = 0
@@ -132,15 +136,15 @@ class Player(pygame.sprite.Sprite):
         # count down attack active
         if self.attacking > 0:
             self.attacking -= 1
+            self.image.fill(self.dashColor)
 
     def calc_grav(self):
         """ Calculate effect of gravity. """
         self.change_y += 0.15 * textHeight
 
         # See if we are on the ground.
-        if self.rect.y >= SCREEN_HEIGHT - self.rect.height and self.change_y >= 0:
-            self.change_y = 0
-            self.rect.y = SCREEN_HEIGHT - self.rect.height
+        if self.rect.y >= SCREEN_HEIGHT:
+            self.rect.y =  -self.rect.height
 
     def jump(self):
 
@@ -336,7 +340,7 @@ class Level_01(Level):
         level = [[60, 2, 130, 32],  # middle platform
                  [34, 2, 86, 44],  # left middle platform
                  [34, 2, 200, 44],  # left middle platform
-                 [320, 10, 0, 76],  # floor
+                 [208, 10, 56, 76],  # floor
                  [30, 8, 0, 74],  # floor left podium
                  [30, 8, 290, 74],  # floor right podium
                  [6, 83, 0, 0],  # left wall
@@ -377,25 +381,78 @@ class Level_01(Level):
         self.b_start_y = 65*textHeight
 
 
-def win_check(player_a, player_b, level_list):
+def win_check(player_a, player_b, level_list, current_level, current_level_no):
     if pygame.sprite.collide_rect(player_a, player_b):
         if player_a.attacking and player_b.attacking:
             print "Tie"
-            load_level(player_a, player_b, False, level_list)
+            pause(player_a, player_b, 5000)
+            load_level(player_a, player_b, False, level_list, current_level, current_level_no)
         elif player_a.attacking:
             print "A Wins"
             player_a.score += 1
-            load_level(player_a, player_b, True, level_list)
+            pause(player_a, player_b, 5000)
+            load_level(player_a, player_b, True, level_list, current_level, current_level_no)
         elif player_b.attacking:
             print "B Wins"
             player_b.score += 1
-            load_level(player_a, player_b, True, level_list)
+            pause(player_a, player_b, 5000)
+            load_level(player_a, player_b, True, level_list, current_level, current_level_no)
         else:
             print "Nobody attacking"
 
-def load_level(player_a, player_b, change_level, level_list):
+
+def pause(player_a, player_b, min_duration):
+
+    player_a.move_x = 0
+    player_a.move_y = 0
+    player_a.dash_x = 0
+    player_a.dash_y = 0
+    player_b.move_x = 0
+    player_b.move_y = 0
+    player_b.dash_x = 0
+    player_b.dash_y = 0
+
+    pygame.time.wait(min_duration)
+
+    a_key_is_down = True
+
+    while a_key_is_down:
+        pygame.time.delay(1000)
+        a_key_is_down = False
+        press = pygame.key.get_pressed()
+        if pygame.key.get_focused():
+            for i in range(0, len(press)):
+                if press[i]:
+                    a_key_is_down = True
+                    print "a key is pressed: "
+                    print i
+        pygame.event.pump()
+
+    pygame.event.clear()
+
+
+def load_level(player_a, player_b, change_level, level_list, current_level, current_level_no):
     if change_level:
-        current_level_no = random.randint(0, level_list.amount() - 1)
+        current_level_no = random.randint(0, len(level_list) - 1)
+
+    player_a.rect.x = current_level.a_start_x
+    player_a.rect.y = current_level.a_start_y
+
+    player_b.rect.x = current_level.b_start_x
+    player_b.rect.y = current_level.b_start_y
+
+    player_a.attacking = 0
+    player_b.attacking = 0
+
+    player_a.move_x = 0
+    player_a.move_y = 0
+    player_a.dash_x = 0
+    player_a.dash_y = 0
+    player_b.move_x = 0
+    player_b.move_y = 0
+    player_b.dash_x = 0
+    player_b.dash_y = 0
+
 
 def main():
     """ Main Program """
@@ -412,8 +469,11 @@ def main():
     playerB = Player()
 
     # set player colors
-    playerA.color = RED
-    playerB.color = YELLOW
+    playerA.color = VIOLET
+    playerB.color = GOLD
+
+    playerA.dashColor = MAGENTA
+    playerB.dashColor = ORANGE
 
     # Create all the levels
     level_list = []
@@ -464,15 +524,15 @@ def main():
                     playerA.dash()
 
                 # playerB controls
-                if event.key == pygame.K_h:
+                if event.key == pygame.K_j:
                     playerB.go_left()
                     playerB.leftPressed = True
-                if event.key == pygame.K_k:
+                if event.key == pygame.K_l:
                     playerB.go_right()
                     playerB.rightPressed = True
-                if event.key == pygame.K_u:
+                if event.key == pygame.K_i:
                     playerB.upPressed = True
-                if event.key == pygame.K_j:
+                if event.key == pygame.K_k:
                     playerB.downPressed = True
                 if event.key == pygame.K_QUOTE:
                     playerB.jump()
@@ -494,15 +554,15 @@ def main():
                     playerA.downPressed = False
 
                 # playerB controls
-                if event.key == pygame.K_h:
+                if event.key == pygame.K_j:
                     playerB.go_right()
                     playerB.leftPressed = False
-                if event.key == pygame.K_k:
+                if event.key == pygame.K_l:
                     playerB.go_left()
                     playerB.rightPressed = False
-                if event.key == pygame.K_u:
+                if event.key == pygame.K_i:
                     playerB.upPressed = False
-                if event.key == pygame.K_j:
+                if event.key == pygame.K_k:
                     playerB.downPressed = False
 
         # Update the player.
@@ -524,9 +584,9 @@ def main():
             playerB.rect.left = 0
 
         # check if somebody won
-        win_check(playerA, playerB)
+        win_check(playerA, playerB, level_list, current_level, current_level_no)
 
-        # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
+        # ALL CODE TO DRAW SHOULD 2GO BELOW THIS COMMENT
         current_level.draw(screen)
         active_sprite_list.draw(screen)
 
@@ -538,7 +598,8 @@ def main():
         # Go ahead and update the screen with what we've drawn.
         pygame.display.update()
 
-        # print clock.get_fps()
+        # fps = clock.get_fps()
+        # print fps
 
     pygame.quit()
 
