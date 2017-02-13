@@ -26,15 +26,18 @@ LBLUE = (150, 160, 255)
 
 # Screen dimensions
 SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+SCREEN_HEIGHT = 640
 
-textHeight = 9
-textWidth = 4
-textRows = SCREEN_HEIGHT/textHeight  # 80
-textColumns = SCREEN_WIDTH/textWidth  # 320
+textRows = 80
+textColumns = 320
+textHeight = SCREEN_HEIGHT / textRows
+textWidth = SCREEN_WIDTH / textColumns
 
 current_level_no = 0
 numLevels = 1
+
+#import sounds
+jump_sound = pygame.mixer.Sound("SoundEffects/jump.ogg")
 
 class Player(pygame.sprite.Sprite):
 
@@ -157,7 +160,8 @@ class Player(pygame.sprite.Sprite):
 
         # If it is ok to jump, set our speed upwards
         if len(platform_hit_list) > 0 or self.rect.bottom >= SCREEN_HEIGHT:
-            self.change_y = -2.2 * textHeight
+            self.change_y = -2.1 * textHeight
+            jump_sound.play()
 
     # Player-controlled movement:
     def go_left(self):
@@ -412,6 +416,15 @@ def pause(player_a, player_b, min_duration):
     player_b.dash_x = 0
     player_b.dash_y = 0
 
+    player_a.upPressed = False
+    player_a.leftPressed = False
+    player_a.rightPressed = False
+    player_a.downPressed = False
+    player_b.upPressed = False
+    player_b.leftPressed = False
+    player_b.rightPressed = False
+    player_b.downPressed = False
+
     pygame.time.wait(min_duration)
 
     a_key_is_down = True
@@ -598,8 +611,8 @@ def main():
         # Go ahead and update the screen with what we've drawn.
         pygame.display.update()
 
-        # fps = clock.get_fps()
-        # print fps
+        fps = clock.get_fps()
+        print fps
 
     pygame.quit()
 
