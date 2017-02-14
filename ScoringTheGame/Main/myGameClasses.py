@@ -21,8 +21,10 @@ DGREY = (60, 60, 60)
 LBLUE = (150, 160, 255)
 
 # set font info
-# font = pygame.font.SysFont("Courier New", 10, bold=False, italic=False)
-# fontB = pygame.font.SysFont("Courier New", 10, bold=True, italic=False)
+font = pygame.font.SysFont("Courier New", 10, bold=False, italic=False)
+fontB = pygame.font.SysFont("Courier New", 10, bold=True, italic=False)
+titleFont = pygame.font.SysFont("Courier New", 50, bold=True, italic=False)
+scoreFont = pygame.font.SysFont("Courier New", 30, bold=True, italic=False)
 
 # Screen dimensions
 SCREEN_WIDTH = 1280
@@ -38,6 +40,9 @@ numLevels = 1
 
 #import sounds
 jump_sound = pygame.mixer.Sound("SoundEffects/jump.ogg")
+attack_sound = pygame.mixer.Sound("SoundEffects/attack.ogg")
+death_sound = pygame.mixer.Sound("SoundEffects/death.ogg")
+
 
 class Player(pygame.sprite.Sprite):
 
@@ -147,7 +152,7 @@ class Player(pygame.sprite.Sprite):
 
         # See if we are on the ground.
         if self.rect.y >= SCREEN_HEIGHT:
-            self.rect.y =  -self.rect.height
+            self.rect.y = -self.rect.height
 
     def jump(self):
 
@@ -178,6 +183,7 @@ class Player(pygame.sprite.Sprite):
     def dash_success(self):
         self.canDash = False
         self.attacking = 10
+        attack_sound.play()
 
     def dash(self):
         if self.canDash:
@@ -385,36 +391,44 @@ class Level_01(Level):
         self.b_start_y = 65*textHeight
 
 
-def win_check(player_a, player_b, level_list, current_level, current_level_no):
+def win_check(player_a, player_b, level_list, current_level, current_level_no, screen):
     if pygame.sprite.collide_rect(player_a, player_b):
         if player_a.attacking and player_b.attacking:
             print "Tie"
-            pause(player_a, player_b, 5000)
+            pause(player_a, player_b, 5000, screen, 0)
             load_level(player_a, player_b, False, level_list, current_level, current_level_no)
+            death_sound.play()
+
         elif player_a.attacking:
             print "A Wins"
             player_a.score += 1
-            pause(player_a, player_b, 5000)
+            pause(player_a, player_b, 5000, screen, 1)
             load_level(player_a, player_b, True, level_list, current_level, current_level_no)
+            death_sound.play()
         elif player_b.attacking:
             print "B Wins"
             player_b.score += 1
-            pause(player_a, player_b, 5000)
+            pause(player_a, player_b, 5000, screen, 2)
             load_level(player_a, player_b, True, level_list, current_level, current_level_no)
+            death_sound.play()
         else:
             print "Nobody attacking"
 
 
-def pause(player_a, player_b, min_duration):
+def pause(player_a, player_b, min_duration, screen, winner):
 
     player_a.move_x = 0
     player_a.move_y = 0
     player_a.dash_x = 0
     player_a.dash_y = 0
+    player_a.change_x = 0
+    player_a.change_y = 0
     player_b.move_x = 0
     player_b.move_y = 0
     player_b.dash_x = 0
     player_b.dash_y = 0
+    player_b.change_x = 0
+    player_b.change_y = 0
 
     player_a.upPressed = False
     player_a.leftPressed = False
@@ -425,7 +439,39 @@ def pause(player_a, player_b, min_duration):
     player_b.rightPressed = False
     player_b.downPressed = False
 
-    pygame.time.wait(min_duration)
+    # draw bars
+    if player_a.rect.y <= player_b.rect.y:
+        botRectTop = player_b.rect.y + 9 * textHeight
+        topRectBot = player_a.rect.y - 3 * textHeight
+    else:
+        botRectTop = player_a.rect.y + 9 * textHeight
+        topRectBot = player_b.rect.y - 3 * textHeight
+    pygame.draw.rect(screen, BLACK, [0, 0, SCREEN_WIDTH, topRectBot])
+    pygame.draw.rect(screen, BLACK, [0, botRectTop, SCREEN_WIDTH, SCREEN_HEIGHT - botRectTop])
+
+    # draw text
+    textY = 50
+
+    if winner == 0:
+        title = titleFont.render("Tie", True, WHITE)
+        title_width, title_height = titleFont.size("Tie")
+        screen.blit(title, [(SCREEN_WIDTH-title_width)/2, textY])
+    elif winner == 1:
+        title = titleFont.render("Player A Wins", True, WHITE)
+        title_width, title_height = titleFont.size("Player A Wins")
+        screen.blit(title, [(SCREEN_WIDTH-title_width)/2, textY])
+    elif winner == 2:
+        title = titleFont.render("Player B Wins", True, WHITE)
+        title_width, title_height = titleFont.size("Player B Wins")
+        screen.blit(title, [(SCREEN_WIDTH-title_width)/2, textY])
+
+    text = scoreFont.render("Player A: " + str(player_a.score), True, WHITE)
+    score_width, score_height = scoreFont.size("Player A: " + str(player_a.score))
+    screen.blit(text, [(SCREEN_WIDTH-score_width)/2, textY + title_height + 10])
+
+    pygame.display.update()
+
+    pygame.time.delay(min_duration)
 
     a_key_is_down = True
 
@@ -486,7 +532,7 @@ def main():
     playerB.color = GOLD
 
     playerA.dashColor = MAGENTA
-    playerB.dashColor = ORANGE
+    playerB.dashColor = RED
 
     # Create all the levels
     level_list = []
@@ -596,9 +642,6 @@ def main():
         if playerB.rect.left < 0:
             playerB.rect.left = 0
 
-        # check if somebody won
-        win_check(playerA, playerB, level_list, current_level, current_level_no)
-
         # ALL CODE TO DRAW SHOULD 2GO BELOW THIS COMMENT
         current_level.draw(screen)
         active_sprite_list.draw(screen)
@@ -611,8 +654,11 @@ def main():
         # Go ahead and update the screen with what we've drawn.
         pygame.display.update()
 
-        fps = clock.get_fps()
-        print fps
+        # check if somebody won
+        win_check(playerA, playerB, level_list, current_level, current_level_no, screen)
+
+        # fps = clock.get_fps()
+        # print fps
 
     pygame.quit()
 
