@@ -157,7 +157,9 @@ class Player(pygame.sprite.Sprite):
                     else:
                         # Stop our vertical movement
                         self.change_y = 0
-                    self.canDash = True
+
+                    if not self.attacking:
+                        self.canDash = True
                 elif self.change_y < 0:
                     self.rect.top = block.rect.bottom
 
@@ -530,20 +532,20 @@ def win_check(player_a, player_b, level_list, current_level, screen):
     if pygame.sprite.collide_rect(player_a, player_b):
         if player_a.attacking and player_b.attacking:
             print "Tie"
-            pause(player_a, player_b, 5000, screen, 0)
+            pause(player_a, player_b, 5000, screen, 0, False)
             load_level(player_a, player_b, False, level_list, current_level)
             death_sound.play()
 
         elif player_a.attacking or player_b.ded:
             print "A Wins"
             player_a.score += 1
-            pause(player_a, player_b, 5000, screen, 1)
+            pause(player_a, player_b, 5000, screen, 1, False)
             load_level(player_a, player_b, True, level_list, current_level)
             death_sound.play()
         elif player_b.attacking or player_a.ded:
             print "B Wins"
             player_b.score += 1
-            pause(player_a, player_b, 5000, screen, 2)
+            pause(player_a, player_b, 5000, screen, 2, False)
             load_level(player_a, player_b, True, level_list, current_level)
             death_sound.play()
         else:
@@ -551,19 +553,19 @@ def win_check(player_a, player_b, level_list, current_level, screen):
 
     if player_a.ded and player_b.ded:
         print "Tie"
-        pause(player_a, player_b, 5000, screen, 0)
+        pause(player_a, player_b, 5000, screen, 0, True)
         load_level(player_a, player_b, False, level_list, current_level)
         death_sound.play()
     elif player_b.ded:
         print "A Wins"
         player_a.score += 1
-        pause(player_a, player_b, 5000, screen, 1)
+        pause(player_a, player_b, 5000, screen, 1, True)
         load_level(player_a, player_b, True, level_list, current_level)
         death_sound.play()
     elif player_a.ded:
         print "B Wins"
         player_b.score += 1
-        pause(player_a, player_b, 5000, screen, 2)
+        pause(player_a, player_b, 5000, screen, 2, True)
         load_level(player_a, player_b, True, level_list, current_level)
         death_sound.play()
 
@@ -571,7 +573,7 @@ def win_check(player_a, player_b, level_list, current_level, screen):
     player_b.ded = False
 
 
-def pause(player_a, player_b, min_duration, screen, winner):
+def pause(player_a, player_b, min_duration, screen, winner, trapped):
 
     player_a.move_x = 0
     player_a.move_y = 0
@@ -596,7 +598,14 @@ def pause(player_a, player_b, min_duration, screen, winner):
     player_b.downPressed = False
 
     # draw bars
-    if player_a.rect.y <= player_b.rect.y:
+    if trapped:
+        if winner == 1:
+            botRectTop = player_b.rect.y + 9 * textHeight
+            topRectBot = player_b.rect.y - 3 * textHeight
+        if winner == 2:
+            botRectTop = player_a.rect.y + 9 * textHeight
+            topRectBot = player_a.rect.y - 3 * textHeight
+    elif player_a.rect.y <= player_b.rect.y:
         botRectTop = player_b.rect.y + 9 * textHeight
         topRectBot = player_a.rect.y - 3 * textHeight
     else:
