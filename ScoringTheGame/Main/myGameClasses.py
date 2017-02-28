@@ -445,6 +445,7 @@ class Level_01(Level):
         self.b_start_x = 320*textWidth - 15*textWidth - player_b.rect.width
         self.b_start_y = 65*textHeight
 
+
 # Create platforms for  level 2
 class Level_02(Level):
     """ Definition for level 1. """
@@ -521,6 +522,8 @@ class Level_02(Level):
         self.a_start_y = 26*textHeight
         self.b_start_x = 320*textWidth - 50*textWidth - player_b.rect.width
         self.b_start_y = 44*textHeight
+
+        print "level load success"
 
 
 def win_check(player_a, player_b, level_list, current_level, screen):
@@ -661,6 +664,10 @@ def load_level(player_a, player_b, change_level, level_list, current_level):
 
     current_level.platform_list.empty()
     current_level = level_list[player_a.current_level_no]
+    current_level.__init__(player_a, player_b)
+    # current_level.update()
+
+    print player_a.current_level_no
 
     player_a.rect.x = current_level.a_start_x
     player_a.rect.y = current_level.a_start_y
@@ -782,12 +789,11 @@ def main():
     playerB.dashColor = RED
 
     # Create all the levels
-    level_list = []
-    level_list.append(Level_01(playerA, playerB))
-    level_list.append(Level_02(playerA, playerB))
+    level_list = [Level_01(playerA, playerB), Level_02(playerA, playerB)]
 
     # Set the current level
-    current_level = level_list[0]
+    playerA.current_level_no = 0
+    current_level = level_list[playerA.current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
     playerA.level = current_level
