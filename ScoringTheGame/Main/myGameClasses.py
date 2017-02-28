@@ -910,6 +910,7 @@ def main():
             playerB.rect.left = 0
 
         # ALL CODE TO DRAW SHOULD 2GO BELOW THIS COMMENT
+        current_level = level_list[playerA.current_level_no]
         current_level.draw(screen)
         active_sprite_list.draw(screen)
 
