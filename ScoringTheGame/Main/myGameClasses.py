@@ -502,7 +502,7 @@ class Level_02(Level):
         block = MovingPlatform(50, 2, GREEN)
         block.rect.x = 170*textWidth
         block.rect.y = 72*textHeight
-        block.boundary_bottom = 74*textHeight
+        block.boundary_bottom = 72*textHeight
         block.boundary_top = 10*textHeight
         block.change_y = -textWidth
         block.player_a = self.player_a
@@ -679,6 +679,9 @@ def load_level(player_a, player_b, change_level, level_list, current_level):
     # current_level.update()
 
     print player_a.current_level_no
+
+    player_a.level = current_level
+    player_b.level = current_level
 
     player_a.rect.x = current_level.a_start_x
     player_a.rect.y = current_level.a_start_y
