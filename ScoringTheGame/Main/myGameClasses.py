@@ -128,9 +128,11 @@ class Player(pygame.sprite.Sprite):
                 # set our right side to the left side of the item we hit
                 if self.change_x > 0:
                     self.rect.right = block.rect.left
+                    print "fuck"
                 elif self.change_x < 0:
                     # Otherwise if we are moving left, do the opposite.
                     self.rect.left = block.rect.right
+                    print "fuck"
 
         # Move up/down
         self.rect.y += self.change_y # + self.platformBoost_y
@@ -143,7 +145,6 @@ class Player(pygame.sprite.Sprite):
             if isinstance(block, Trap):
                 if block.active:
                     self.ded = True
-                    print "you ded"
             else:
                 if self.change_y > 0:
                     self.rect.bottom = block.rect.top
@@ -152,6 +153,7 @@ class Player(pygame.sprite.Sprite):
                         self.platformBoost_y = block.change_y
                         if self.platformBoost_y > 0:
                             self.change_y = self.platformBoost_y
+                            print "fuck"
                         else:
                             self.change_y = 0
                     else:
@@ -303,7 +305,7 @@ class MovingPlatform(Platform):
             # to the left side of the item we hit
             if self.change_x < 0:
                 self.player_a.rect.right = self.rect.left
-            else:
+            elif self.change_x > 0:
                 # Otherwise if we are moving left, do the opposite.
                 self.player_a.rect.left = self.rect.right
 
@@ -313,7 +315,7 @@ class MovingPlatform(Platform):
 
             if self.change_x < 0:
                 self.player_b.rect.right = self.rect.left
-            else:
+            elif self.change_x > 0:
                 self.player_b.rect.left = self.rect.right
 
         # Move up/down
