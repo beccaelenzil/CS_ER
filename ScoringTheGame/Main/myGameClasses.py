@@ -128,11 +128,9 @@ class Player(pygame.sprite.Sprite):
                 # set our right side to the left side of the item we hit
                 if self.change_x > 0:
                     self.rect.right = block.rect.left
-                    print "fuck"
                 elif self.change_x < 0:
                     # Otherwise if we are moving left, do the opposite.
                     self.rect.left = block.rect.right
-                    print "fuck"
 
         # Move up/down
         self.rect.y += self.change_y # + self.platformBoost_y
@@ -153,7 +151,6 @@ class Player(pygame.sprite.Sprite):
                         self.platformBoost_y = block.change_y
                         if self.platformBoost_y > 0:
                             self.change_y = self.platformBoost_y
-                            print "fuck"
                         else:
                             self.change_y = 0
                     else:
@@ -237,7 +234,7 @@ class Player(pygame.sprite.Sprite):
         if self.traps_left > 0:
             self.traps_left -= 1
 
-            block = Trap()
+            block = Trap(6, 8)
             block.rect.x = self.rect.x - textWidth
             block.rect.y = self.rect.y - textHeight
             block.player_a = player_a
@@ -260,9 +257,9 @@ class Platform(pygame.sprite.Sprite):
 
 class Trap(Platform):
 
-    def __init__(self):
+    def __init__(self, height, width):
         # super(self.__class__, self).__init__(width, height)
-        Platform.__init__(self, 6, 8, LGREY)
+        Platform.__init__(self, height, width, LGREY)
         self.active = False
 
     def update(self):
@@ -477,7 +474,7 @@ class Level_02(Level):
         # Add a moving platform
         block = MovingPlatform(50, 2, GREEN)
         block.rect.x = 30*textWidth
-        block.rect.y = 36*textHeight
+        block.rect.y = 34*textHeight
         block.boundary_bottom = 72*textHeight
         block.boundary_top = 10*textHeight
         block.change_y = textWidth
@@ -489,7 +486,7 @@ class Level_02(Level):
         # Add a moving platform
         block = MovingPlatform(50, 2, GREEN)
         block.rect.x = 100*textWidth
-        block.rect.y = 54*textHeight
+        block.rect.y = 52*textHeight
         block.boundary_bottom = 72*textHeight
         block.boundary_top = 10*textHeight
         block.change_y = textWidth
@@ -501,7 +498,7 @@ class Level_02(Level):
         # Add a moving platform
         block = MovingPlatform(50, 2, GREEN)
         block.rect.x = 170*textWidth
-        block.rect.y = 72*textHeight
+        block.rect.y = 70*textHeight
         block.boundary_bottom = 72*textHeight
         block.boundary_top = 10*textHeight
         block.change_y = -textWidth
@@ -513,7 +510,7 @@ class Level_02(Level):
         # Add a moving platform
         block = MovingPlatform(50, 2, GREEN)
         block.rect.x = 240*textWidth
-        block.rect.y = 54*textHeight
+        block.rect.y = 56*textHeight
         block.boundary_bottom = 72*textHeight
         block.boundary_top = 10*textHeight
         block.change_y = -textWidth
@@ -527,7 +524,63 @@ class Level_02(Level):
         self.b_start_x = 320*textWidth - 50*textWidth - player_b.rect.width
         self.b_start_y = 44*textHeight
 
-        print "level load success"
+
+# Create platforms for  level 3
+class Level_03(Level):
+    """ Definition for level 1. """
+
+    def __init__(self, player_a, player_b):
+        """ Create level 1. """
+
+        # Call the parent constructor
+        Level.__init__(self, player_a, player_b)
+
+        # Array with width, height, x, and y of platform
+        level = [[60, 4, 140, 62],  # bottom
+                 [60, 4, 140, 14],  # top
+                 [8, 4, 208, 54],
+                 [8, 4, 208, 22],
+                 [24, 4, 200, 50],
+                 [8, 4, 216, 26],
+                 [8, 8, 232, 38],  #nose
+                 [8, 8, 124, 50],
+                 [8, 8, 124, 22],
+                 [8, 4, 116, 46],
+                 [8, 4, 116, 30],
+                 [8, 4, 108, 42],
+                 # [8, 4, 108, 34],
+                 [16, 4, 92, 46],
+                 [16, 4, 92, 30],
+                 ]
+
+        # Go through the array above and add platforms
+        for platform in level:
+            block = Platform(platform[0], platform[1], GREEN)
+            block.rect.x = platform[2]*textWidth
+            block.rect.y = platform[3]*textHeight
+            block.player_a = self.player_a
+            block.player_b = self.player_b
+            self.platform_list.add(block)
+
+        eye = [[2, 4, 200, 32],
+               [2, 6, 202, 31],
+               [8, 8, 204, 30],
+               [2, 6, 212, 31],
+               [2, 4, 214, 32],
+               ]
+
+        for platform in eye:
+            block = Trap(platform[0], platform[1])
+            block.rect.x = platform[2]*textWidth
+            block.rect.y = platform[3]*textHeight
+            block.player_a = self.player_a
+            block.player_b = self.player_b
+            self.platform_list.add(block)
+
+        self.a_start_x = 15*textWidth
+        self.a_start_y = 65*textHeight
+        self.b_start_x = 320*textWidth - 15*textWidth - player_b.rect.width
+        self.b_start_y = 65*textHeight
 
 
 def win_check(player_a, player_b, level_list, current_level, screen):
@@ -671,7 +724,7 @@ def pause(player_a, player_b, min_duration, screen, winner, trapped):
 
 def load_level(player_a, player_b, change_level, level_list, current_level):
     if change_level:
-        player_a.current_level_no = random.randint(0, len(level_list) - 1)
+        player_a.current_level_no = random.randint(0, 1)
 
     current_level.platform_list.empty()
     current_level = level_list[player_a.current_level_no]
@@ -789,7 +842,7 @@ def main():
     pygame.display.set_caption("Decker Duels")
 
     # bring up the menu
-    menu(screen)
+    # menu(screen)
 
     # Create the player
     playerA = Player()
@@ -803,10 +856,10 @@ def main():
     playerB.dashColor = RED
 
     # Create all the levels
-    level_list = [Level_01(playerA, playerB), Level_02(playerA, playerB)]
+    level_list = [Level_01(playerA, playerB), Level_02(playerA, playerB), Level_03(playerA, playerB)]
 
     # Set the current level
-    playerA.current_level_no = 0
+    playerA.current_level_no = 2
     current_level = level_list[playerA.current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
