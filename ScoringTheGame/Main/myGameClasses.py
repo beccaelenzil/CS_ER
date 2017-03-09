@@ -44,6 +44,12 @@ jump_sound = pygame.mixer.Sound("SoundEffects/jump.ogg")
 attack_sound = pygame.mixer.Sound("SoundEffects/attack.ogg")
 death_sound = pygame.mixer.Sound("SoundEffects/death.ogg")
 
+# play background sounds
+pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
+pygame.mixer.music.load('SoundEffects/theme.ogg')
+pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
+pygame.mixer.music.play()
+
 
 class Player(pygame.sprite.Sprite):
 
@@ -544,13 +550,32 @@ class Level_03(Level):
                  [8, 4, 216, 26],
                  [8, 8, 232, 38],  #nose
                  [8, 8, 124, 50],
-                 [8, 8, 124, 22],
+                 [8, 4, 124, 26],
                  [8, 4, 116, 46],
                  [8, 4, 116, 30],
                  [8, 4, 108, 42],
                  # [8, 4, 108, 34],
                  [16, 4, 92, 46],
                  [16, 4, 92, 30],
+                 [8, 4, 84, 50],
+                 [8, 4, 84, 26],
+                 [8, 4, 76, 54],
+                 [8, 4, 76, 22],
+                 [8, 4, 68, 58],
+                 [8, 4, 68, 18],
+                 [8, 12, 60, 46],
+                 [8, 12, 60, 22],
+                 [8, 4, 140, 42],  # side fin
+                 [8, 4, 148, 38],  # side fin
+                 [8, 4, 156, 34],  # side fin
+                 [16, 4, 148, 46],  # side fin
+                 [48, 4, 116, 70],  # bottom fin
+                 [8, 4, 116, 66],  # bottom fin
+                 [8, 4, 164, 66],  # bottom fin
+                 [24, 4, 140, 6],  # top fin
+                 [16, 4, 124, 10],  # top fin
+                 [16, 4, 116, 14],  # top fin
+                 [8, 4, 164, 10],  # top fin
                  ]
 
         # Go through the array above and add platforms
@@ -577,58 +602,59 @@ class Level_03(Level):
             block.player_b = self.player_b
             self.platform_list.add(block)
 
-        self.a_start_x = 15*textWidth
-        self.a_start_y = 65*textHeight
-        self.b_start_x = 320*textWidth - 15*textWidth - player_b.rect.width
-        self.b_start_y = 65*textHeight
+        self.a_start_x = 180*textWidth
+        self.a_start_y = 4*textHeight
+        self.b_start_x = 180*textWidth
+        self.b_start_y = 52*textHeight
 
 
 def win_check(player_a, player_b, level_list, current_level, screen):
     if pygame.sprite.collide_rect(player_a, player_b):
         if player_a.attacking and player_b.attacking:
             print "Tie"
+            death_sound.play()
             pause(player_a, player_b, 5000, screen, 0, False)
             load_level(player_a, player_b, False, level_list, current_level)
-            death_sound.play()
-
         elif player_a.attacking or player_b.ded:
             print "A Wins"
+            death_sound.play()
             player_a.score += 1
             pause(player_a, player_b, 5000, screen, 1, False)
             load_level(player_a, player_b, True, level_list, current_level)
-            death_sound.play()
         elif player_b.attacking or player_a.ded:
             print "B Wins"
+            death_sound.play()
             player_b.score += 1
             pause(player_a, player_b, 5000, screen, 2, False)
             load_level(player_a, player_b, True, level_list, current_level)
-            death_sound.play()
         else:
             print "Nobody attacking"
 
     if player_a.ded and player_b.ded:
         print "Tie"
+        death_sound.play()
         pause(player_a, player_b, 5000, screen, 0, True)
         load_level(player_a, player_b, False, level_list, current_level)
-        death_sound.play()
     elif player_b.ded:
         print "A Wins"
+        death_sound.play()
         player_a.score += 1
         pause(player_a, player_b, 5000, screen, 1, True)
         load_level(player_a, player_b, True, level_list, current_level)
-        death_sound.play()
     elif player_a.ded:
         print "B Wins"
+        death_sound.play()
         player_b.score += 1
         pause(player_a, player_b, 5000, screen, 2, True)
         load_level(player_a, player_b, True, level_list, current_level)
-        death_sound.play()
 
     player_a.ded = False
     player_b.ded = False
 
 
 def pause(player_a, player_b, min_duration, screen, winner, trapped):
+
+    pygame.mixer.music.pause()
 
     player_a.move_x = 0
     player_a.move_y = 0
@@ -670,7 +696,6 @@ def pause(player_a, player_b, min_duration, screen, winner, trapped):
     pygame.draw.rect(screen, BLACK, [0, botRectTop, SCREEN_WIDTH, SCREEN_HEIGHT - botRectTop])
 
     # draw text
-
     if winner == 0:
         title = titleFont.render("Tie", True, WHITE)
         title_width, title_height = titleFont.size("Tie")
@@ -721,10 +746,15 @@ def pause(player_a, player_b, min_duration, screen, winner, trapped):
 
     pygame.event.clear()
 
+    pygame.mixer.music.unpause()
+
 
 def load_level(player_a, player_b, change_level, level_list, current_level):
     if change_level:
-        player_a.current_level_no = random.randint(0, 1)
+        new_rand = random.randint(0, 2)
+        while new_rand == player_a.current_level_no:
+            new_rand = random.randint(0, 2)
+        player_a.current_level_no = new_rand
 
     current_level.platform_list.empty()
     current_level = level_list[player_a.current_level_no]
@@ -842,7 +872,7 @@ def main():
     pygame.display.set_caption("Decker Duels")
 
     # bring up the menu
-    # menu(screen)
+    menu(screen)
 
     # Create the player
     playerA = Player()
@@ -859,7 +889,7 @@ def main():
     level_list = [Level_01(playerA, playerB), Level_02(playerA, playerB), Level_03(playerA, playerB)]
 
     # Set the current level
-    playerA.current_level_no = 2
+    playerA.current_level_no = 0
     current_level = level_list[playerA.current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
@@ -885,6 +915,10 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
+
+            # restart song when reaches end
+            if event.type == pygame.constants.USEREVENT:
+                pygame.mixer.music.play()
 
             if event.type == pygame.KEYDOWN:
                 # playerA Controls
@@ -975,7 +1009,7 @@ def main():
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
         # Limit to 60 frames per second
-        clock.tick(60)
+        clock.tick(24)
 
         # Go ahead and update the screen with what we've drawn.
         pygame.display.update()
