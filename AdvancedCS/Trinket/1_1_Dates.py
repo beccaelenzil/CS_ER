@@ -70,7 +70,6 @@ class Date:
         if self.month > 12:
             self.year += 1
             self.month = 1
-        print self
 
     # retreat the date one day
     def yesterday(self):
@@ -86,7 +85,6 @@ class Date:
                 self.year -= 1
                 self.month = 12
             self.day = DIM[self.month]
-        print self
 
     def addNDays(self, N):
         for i in range(N):
@@ -99,9 +97,37 @@ class Date:
     def isBefore(self, d2):
         if self.year < d2.year:
             return True
-        elif self.month < d2.month:
+        elif self.year == d2.year and self.month < d2.month:
             return True
-        elif self.day < d2.day:
+        elif self.year == d2.year and self.month == d2.month and self.day < d2.day:
             return True
         else:
             return False
+
+    def isAfter(self, d2):
+        if self.year > d2.year:
+            return True
+        elif self.year == d2.year and self.month > d2.month:
+            return True
+        elif self.year == d2.year and self.month == d2.month and self.day > d2.day:
+            return True
+        else:
+            return False
+
+    def diff(self, d2):
+        date = self
+        n = 0
+        while not date.equals(d2):
+            if date.isAfter(d2):
+                date.yesterday()
+                n += 1
+            elif date.isBefore(d2):
+                date.tomorrow()
+                n -= 1
+        return n
+
+    def dow(self):
+        known_date = Date(1,1,0)
+        n = self.diff(known_date) % 7
+        days = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        return days[n]
