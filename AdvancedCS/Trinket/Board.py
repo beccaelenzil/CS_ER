@@ -93,7 +93,7 @@ class Board:
                 if self.data[i][c] == ' ':
                     row += 1
 
-            if row >= self.height:
+            if row < 0:
                 return False
             else:
                 return True
@@ -103,7 +103,7 @@ class Board:
 
         for i in range(self.width):
             for j in range(self.height):
-                if self.data[i][j] == ' ':
+                if self.data[j][i] == ' ':
                     full = False
 
         return full
@@ -160,3 +160,35 @@ class Board:
                     wins = True
 
         return wins
+
+    def hostGame(self):
+        done = False
+        won = False
+        self.clear()
+
+        print "Welcome to gonnegt fore!"
+
+        while not done:
+
+            players = ['X', 'O']
+
+            for activePlayer in players:
+                print self.__repr__()
+
+                print activePlayer + "\'s Turn:"
+
+                col = int(raw_input("What column would you like to play in?"))
+                while not self.allowsMove(col):
+                    col = int(raw_input("You cannot play in column " + str(col) + ".\nWhat column would you like to play in?"))
+
+                self.addMove(col, activePlayer)
+
+                if self.winsFor(activePlayer):
+                    print activePlayer + "s win!"
+                    done = True
+                    won = True
+                    print self.__repr__()
+
+                if self.isFull() and not won:
+                    print "The board is full and nobody has won."
+                    done = True
