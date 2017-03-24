@@ -86,17 +86,10 @@ class Board:
     def allowsMove(self, c):
         if c >= self.width or c < 0:
             return False
+        elif self.data[0][c] != ' ':
+            return False
         else:
-            row = -1
-
-            for i in range(self.height):
-                if self.data[i][c] == ' ':
-                    row += 1
-
-            if row < 0:
-                return False
-            else:
-                return True
+            return True
 
     def isFull(self):
         full = True
