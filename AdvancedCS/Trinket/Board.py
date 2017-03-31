@@ -1,8 +1,11 @@
-# python 2
-#
-# Problem Set 2, Problem 1
-# Name: EZ-Rob
-#
+# File: Board.py
+# Versions: Python 2.7.13
+# Name: Ezra Robinson
+# Date: 3/31/17
+# Desc: Connect-four game with very basic AI
+# Usage: create a board object, then player objects for the number of AI
+#       players you want, then call playGame on the board passing in 'human'
+#       or the AI Player objects as players
 
 import random
 
@@ -189,6 +192,37 @@ class Board:
                     print "The board is full and nobody has won."
                     done = True
 
+    def playGame(self, px, po):
+        done = False
+        won = False
+        self.clear()
+
+        print "Welcome to Gonnegt Fore!"
+
+        while not done:
+
+            players = [px, po]
+
+            for activePlayer in players:
+                print self.__repr__()
+
+                print activePlayer + "\'s Turn:"
+
+                col = int(raw_input("What column would you like to play in?"))
+                while not self.allowsMove(col):
+                    col = int(raw_input("You cannot play in column " + str(col) + ".\nWhat column would you like to play in?"))
+
+                self.addMove(col, activePlayer)
+
+                if self.winsFor(activePlayer):
+                    print activePlayer + "s win!"
+                    done = True
+                    won = True
+                    print self.__repr__()
+
+                if self.isFull() and not won:
+                    print "The board is full and nobody has won."
+                    done = True
 
 class Player:
 
@@ -257,3 +291,6 @@ class Player:
             b.delMove(col)
 
         return scores
+
+    def nextMove(self, b):
+        return self.tiebreakMove(self.scoresFor(b))
