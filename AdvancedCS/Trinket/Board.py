@@ -205,9 +205,10 @@ class Board:
 
             for activePlayer in players:
 
-                print self.__repr__()
-
                 if not won:
+
+                    print self.__repr__()
+
                     if activePlayer == px:
                         playerLetter = 'X'
                     elif activePlayer == po:
@@ -227,11 +228,10 @@ class Board:
                         self.addMove(activePlayer.nextMove(self), playerLetter)
 
                     if self.winsFor(playerLetter):
+                        print self.__repr__()
                         print playerLetter + "s win!"
                         done = True
                         won = True
-                        print 'asldjfalskdj'
-                        print self.__repr__()
 
                     if self.isFull() and not won:
                         print "The board is full and nobody has won."
@@ -312,5 +312,6 @@ class Player:
 
 def test():
     b = Board(6,7)
-    p = Player('X', 'LEFT', 4)
+    p = Player('X', 'RANDOM', 4)
     b.playGame(p,'human')
+    print b
