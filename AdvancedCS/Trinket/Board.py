@@ -135,9 +135,9 @@ class Board:
         for col in range(0,W):
             for row in range(0,H-3):
                 if D[row][col] == ox and \
-                   D[row][col+1] == ox and \
-                   D[row][col+2] == ox and \
-                   D[row][col+3] == ox:
+                   D[row+1][col] == ox and \
+                   D[row+2][col] == ox and \
+                   D[row+3][col] == ox:
                     wins = True
 
         # check for down diagonals
@@ -204,25 +204,38 @@ class Board:
             players = [px, po]
 
             for activePlayer in players:
+
                 print self.__repr__()
 
-                print activePlayer + "\'s Turn:"
+                if not won:
+                    if activePlayer == px:
+                        playerLetter = 'X'
+                    elif activePlayer == po:
+                        playerLetter = 'O'
 
-                col = int(raw_input("What column would you like to play in?"))
-                while not self.allowsMove(col):
-                    col = int(raw_input("You cannot play in column " + str(col) + ".\nWhat column would you like to play in?"))
 
-                self.addMove(col, activePlayer)
+                    if activePlayer == 'human':
+                        print playerLetter + "\'s Turn:"
 
-                if self.winsFor(activePlayer):
-                    print activePlayer + "s win!"
-                    done = True
-                    won = True
-                    print self.__repr__()
+                        col = int(raw_input("What column would you like to play in?"))
+                        while not self.allowsMove(col):
+                            col = int(raw_input("You cannot play in column " + str(col) + ".\nWhat column would you like to play in?"))
 
-                if self.isFull() and not won:
-                    print "The board is full and nobody has won."
-                    done = True
+                        self.addMove(col, playerLetter)
+                    else:
+                        print "The AI played:"
+                        self.addMove(activePlayer.nextMove(self), playerLetter)
+
+                    if self.winsFor(playerLetter):
+                        print playerLetter + "s win!"
+                        done = True
+                        won = True
+                        print 'asldjfalskdj'
+                        print self.__repr__()
+
+                    if self.isFull() and not won:
+                        print "The board is full and nobody has won."
+                        done = True
 
 class Player:
 
@@ -286,11 +299,18 @@ class Player:
 
         for col in range(b.width):
             b.addMove(col, self.oppCh())
-            if scores[col] == 50.0:
-                scores[col] = self.scoreBoard(b)
+            if scores[col] != 100.0:
+                # scores[col] = self.scoreBoard(b)
+                if b.winsFor(self.oppCh()):
+                    scores[col] = 75.0
             b.delMove(col)
 
         return scores
 
     def nextMove(self, b):
         return self.tiebreakMove(self.scoresFor(b))
+
+def test():
+    b = Board(6,7)
+    p = Player('X', 'LEFT', 4)
+    b.playGame(p,'human')
