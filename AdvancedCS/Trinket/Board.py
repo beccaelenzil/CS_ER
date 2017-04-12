@@ -214,6 +214,7 @@ class Board:
                     elif activePlayer == po:
                         playerLetter = 'O'
 
+                    print '\n'
 
                     if activePlayer == 'human':
                         print playerLetter + "\'s Turn:"
@@ -224,8 +225,9 @@ class Board:
 
                         self.addMove(col, playerLetter)
                     else:
-                        print "The AI played:"
-                        self.addMove(activePlayer.nextMove(self), playerLetter)
+                        col = activePlayer.nextMove(self)
+                        print "The AI played in column " + str(col)
+                        self.addMove(col, playerLetter)
 
                     if self.winsFor(playerLetter):
                         print self.__repr__()
@@ -311,7 +313,7 @@ class Player:
         return self.tiebreakMove(self.scoresFor(b))
 
 def test():
-    b = Board(6,7)
+    b = Board(7,6)
     p = Player('X', 'RANDOM', 4)
     b.playGame(p,'human')
     print b
