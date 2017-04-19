@@ -37,17 +37,17 @@ def QuickSort(alist):
         if item < pivot:
             midpoint += 1
 
-    newList = alist[:midpoint]
-    if len(newList) > 1:
+    newList = alist[:midpoint]  # take first half of list and if longer than 1 item, quicksort
+    if len(newList) > 2 or len(newList) == 2 and newList[0] != min(newList):
         QuickSort(newList)
-        for i in newList:
+        for i in range(len(newList)):
             alist[i] = newList[i]
 
-    newList = alist[(midpoint + 1):]
-    if len(newList) > 1:
+    newList = alist[midpoint:]  # take second half of list and if longer than 1 item, quicksort
+    if len(newList) > 2 or len(newList) == 2 and newList[0] != min(newList):
         QuickSort(newList)
-        for i in newList:
-                alist[i] = newList[i]
+        for i in range(len(newList)):
+                alist[midpoint + i] = newList[i]
 
     print alist
 
