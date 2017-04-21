@@ -16,7 +16,10 @@ def makeList(listLength, listRange):
 # sorts alist using quick sort algorithm
 def QuickSort(alist):
     currentList = alist
-    pivot = currentList[0]
+    pivotVal = 0
+    while currentList[pivotVal] == min(currentList):
+        pivotVal += 1
+    pivot = currentList[pivotVal]
 
     for i in range(len(currentList) - 1):
         if currentList[i] >= pivot:
@@ -52,6 +55,36 @@ def QuickSort(alist):
     print alist
 
 
+def InsertionSort(alist):
+
+    workingList = alist  # create temp list
+
+    for i in range(1, len(workingList)):
+        pos = i
+
+        while workingList[pos] < workingList[pos-1] and pos > 0:
+            workingList[pos], workingList[pos-1] = workingList[pos-1], workingList[pos]
+            pos -= 1
+            print workingList
+
+    alist = workingList
+    return alist
+
+
+def SelectionSort(alist):
+
+    for i in range(len(alist)):
+        lowVal = i
+        for j in range(i + 1, len(alist)):
+            if alist[lowVal] > alist[j]:
+                lowVal = j
+
+        alist[i], alist[lowVal] = alist[lowVal], alist[i]
+        print alist
+
+    return alist
+
+
 def test():
     alist = [39, 30, 45, 33, 20, 61, 36, 5, 31, 64, 22, 10, 21, 25, 80, 86, 63, 27, 85, 2, 71, 4, 5]
-    QuickSort(alist)
+    SelectionSort(alist)
