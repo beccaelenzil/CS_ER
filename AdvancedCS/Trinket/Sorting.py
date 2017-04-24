@@ -80,11 +80,31 @@ def SelectionSort(alist):
                 lowVal = j
 
         alist[i], alist[lowVal] = alist[lowVal], alist[i]
-        print alist
 
     return alist
 
 
+def ShellSort(alist, gap):
+    for i in range(gap):  # for each inner list we will create
+        newList = []  # create empty list
+        for j in range(i, len(alist), gap):  # add vals of inner list to newList
+            newList.append(alist[j])
+
+        print newList
+
+        newList = InsertionSort(newList)  # insertion sort the newList
+
+        print newList
+
+        k = 0
+        for j in range(i, len(alist), gap):  #
+            alist[j] = newList[k]
+            k += 1
+        print alist
+
+    return InsertionSort(alist)
+
+
 def test():
     alist = [39, 30, 45, 33, 20, 61, 36, 5, 31, 64, 22, 10, 21, 25, 80, 86, 63, 27, 85, 2, 71, 4, 5]
-    SelectionSort(alist)
+    ShellSort(alist, 4)
