@@ -105,6 +105,54 @@ def ShellSort(alist, gap):
     return InsertionSort(alist)
 
 
+def BubbleSort(alist):
+    done = False
+    while not done:
+        done = True
+        for i in range(len(alist) - 1):
+            if alist[i] > alist[i + 1]:
+                alist[i], alist[i + 1] = alist[i + 1], alist[i]
+                done = False
+        print alist
+    return alist
+
+
+def MergeSort(alist):
+
+    if len(alist) > 1:
+        midpoint = len(alist)//2  # find center of list
+        leftList = alist[:midpoint]  # split in two
+        rightList = alist[midpoint:]
+
+        MergeSort(leftList)  # then recurse
+        MergeSort(rightList)
+
+        leftPos = 0
+        rightPos = 0
+        finalPos = 0
+        while leftPos < len(leftList) and rightPos < len(rightList):
+            if leftList[leftPos] <= rightList[rightPos]:
+                alist[finalPos] = leftList[leftPos]
+                leftPos += 1
+            else:
+                alist[finalPos] = rightList[rightPos]
+                rightPos += 1
+            finalPos += 1
+
+        while leftPos < len(leftList):
+            alist[finalPos] = leftList[leftPos]
+            leftPos += 1
+            finalPos += 1
+
+        while rightPos < len(rightList):
+            alist[finalPos] = rightList[rightPos]
+            rightPos += 1
+            finalPos += 1
+
+    print alist
+    return alist
+
+
 def test():
     alist = [39, 30, 45, 33, 20, 61, 36, 5, 31, 64, 22, 10, 21, 25, 80, 86, 63, 27, 85, 2, 71, 4, 5]
-    ShellSort(alist, 4)
+    MergeSort(alist)
