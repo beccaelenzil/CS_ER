@@ -32,8 +32,9 @@ def binarySearch(alist, item):
 
     if not found and len(newList) > 1:
         print newList
-        binarySearch(newList, item)
+        found = binarySearch(newList, item)
 
+    print found
     return found
 
 
