@@ -40,4 +40,4 @@ def binarySearch(alist, item):
 
 def test():
     alist = [2, 4, 5, 5, 10, 20, 21, 22, 25, 27, 30, 31, 33, 36, 39, 45, 61, 63, 64, 71, 80, 85, 86]
-    binarySearch(alist, 64)
+    binarySearch(alist, 67)
