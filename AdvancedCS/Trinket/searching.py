@@ -30,14 +30,22 @@ def binarySearch(alist, item):
     else:
         newList = alist[midpoint:]
 
-    if not found and len(newList):
-        print newList
-        found = binarySearch(newList, item)
+    if not found:
+        if len(newList) > 1:
+            print newList
+            found = binarySearch(newList, item)
+        elif len(newList) == 1:
+            if newList[0] == item:
+                found = True
+            else:
+                found = False
+        else:
+            found = False
 
     print found
     return found
 
 
-def test():
+def test(x):
     alist = [2, 4, 5, 5, 10, 20, 21, 22, 25, 27, 30, 31, 33, 36, 39, 45, 61, 63, 64, 71, 80, 85, 86]
-    binarySearch(alist, 2)
+    binarySearch(alist, x)
